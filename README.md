@@ -38,7 +38,7 @@ will generate ES5 js files.
 
 # Revision History
 
-* 1.0.0
+* 1.0.1
   - Initial public release
 
 # Copyright and License
