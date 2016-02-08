@@ -6,3 +6,4 @@ test/*.js
 !*.es6.js
 lib/*.es6.js
 !Gruntfile.js
+*.tgz
