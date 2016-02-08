@@ -14,10 +14,16 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: './',
+          cwd: 'src',
           src: [
             '*.es6.js',
-            'lib/*.es6.js',
+          ],
+          dest: 'lib',
+          ext: '.js'
+        }, {
+          expand: true,
+          cwd: './',
+          src: [
             'tests/**/*.es6.js'
           ],
           dest: './',
@@ -31,8 +37,6 @@ module.exports = function (grunt) {
         files: [{
           dot: true,
           src: [
-            '*.map',
-            '*.js',
             'lib/**/*.map',
             'lib/**/*.js',
             'tests/**/*.map',
@@ -41,7 +45,6 @@ module.exports = function (grunt) {
             '!**/*.es6.js',
             '!Gruntfile.js',
             './*.tgz',
-            'auth_creds.json'
           ]
         }]
       }
@@ -53,8 +56,7 @@ module.exports = function (grunt) {
         reporter: require('jshint-stylish')
       },
       all: [
-        '*.es6.js',
-        'lib/*.es6.js',
+        'lib/**/*.es6.js',
         'tests/**/*.es6.js'
       ]
     },

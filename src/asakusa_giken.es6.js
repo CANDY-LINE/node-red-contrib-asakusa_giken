@@ -4,9 +4,9 @@
  * BLECAST_TM (BLE with Temeprature Sensor) node
  */
 
-import * as blecastBl from './lib/blecast_bl';
-import * as blecastTm from './lib/blecast_tm';
-import * as ble from './lib/ble';
+import * as blecastBl from './blecast_bl';
+import * as blecastTm from './blecast_tm';
+import * as ble from './ble';
 
 export default function(RED) {
   let p = ble.start(RED).then(() => {

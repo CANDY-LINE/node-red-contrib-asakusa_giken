@@ -1,6 +1,8 @@
 Asakusa Giken BLE device Node-RED nodes
 ===
 
+node_modules/.bin/babel --out-dir . --source-maps=true *.es6.js lib/*.es6.js tests/**/*.es6.js
+
 This project offers the following BLE device nodes manufactured by Asakusa Giken.
 
 1. [BLECAST_TM](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%2FBLECAST_TM.html) ... A BLE temperature sensor device

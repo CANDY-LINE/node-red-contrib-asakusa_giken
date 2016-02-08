@@ -49,7 +49,7 @@
   },
   "node-red": {
     "nodes": {
-      "asakusa_giken": "asakusa_giken.js"
+      "asakusa_giken": "lib/asakusa_giken.js"
     }
   }
 }
