@@ -4,4 +4,5 @@ node_modules
 lib/*.js
 test/*.js
 !*.es6.js
+lib/*.es6.js
 !Gruntfile.js
