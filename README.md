@@ -32,7 +32,7 @@ $ npm install
 ## How to build
 
 ```
-$ grunt build
+$ npm run build
 ```
 will generate ES5 js files.
 

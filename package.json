@@ -12,6 +12,8 @@
     "url": "https://github.com/Robotma-com/node-red-contrib-asakusa_giken/issues"
   },
   "scripts": {
+    "build": "grunt build",
+    "test": "grunt test",
     "prepublish": "grunt build"
   },
   "homepage": "https://github.com/Robotma-com/node-red-contrib-asakusa_giken#readme",
