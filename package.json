@@ -5,11 +5,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Robotma-com/node-red-contrib-asakusa_giken.git"
+    "url": "https://github.com/CANDY-LINE/node-red-contrib-asakusa_giken.git"
   },
   "author": "Daisuke Baba <baba.daisuke@gmail.com>",
   "bugs": {
-    "url": "https://github.com/Robotma-com/node-red-contrib-asakusa_giken/issues"
+    "url": "https://github.com/CANDY-LINE/node-red-contrib-asakusa_giken/issues"
   },
   "scripts": {
     "build": "grunt build",
@@ -17,7 +17,7 @@
     "clean": "grunt clean",
     "prepublish": "grunt build"
   },
-  "homepage": "https://github.com/Robotma-com/node-red-contrib-asakusa_giken#readme",
+  "homepage": "https://github.com/CANDY-LINE/node-red-contrib-asakusa_giken#readme",
   "keywords": [
     "node-red",
     "bluetooth",
