@@ -59,6 +59,35 @@ export function registerIn(n, categoryName, address, uuid, parse, useString, RED
   }
 }
 
+export function removeIn(n, categoryName, address, uuid, RED) {
+  if (!n || !categoryName || !address) {
+    throw new Error('Invalid node!');
+  }
+  if (!RED) {
+    throw new Error('RED is required!!');
+  }
+  let category = peripheralsIn[categoryName];
+  if (!category) {
+    return false;
+  }
+  let ary = [];
+  if (address in category) {
+    ary = category[address];
+    ary = ary.filter(ele => {
+      return (ele.id === n.id);
+    });
+    ary.forEach((ele) => {
+      let pos = category[address].indexOf(ele);
+      category[address].splice(pos, 1);
+    });
+    if (ary.length === 0) {
+      return false;
+    }
+    return true;
+  }
+  return false;
+}
+
 /**
  * Stop the BLE module immediately.
  * @param RED the initialized RED object
