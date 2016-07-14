@@ -18,12 +18,6 @@ This project offers the following BLE device nodes manufactured by Asakusa Giken
 
 ## Tools
 
-Install the following CLI tools globally.
-
-```
-$ npm install -g grunt-cli babel mocha jshint
-```
-
 Then, try this.
 ```
 $ npm install
@@ -32,14 +26,19 @@ $ npm install
 ## How to build
 
 ```
-$ grunt build
+$ npm run build
 ```
 will generate ES5 js files.
 
 # Revision History
 
+* 1.1.0
+    - Fix an issue where registered BLE peripherals are remained after the corresponding nodes are gone
+    - Update git repo URLs
+
+
 * 1.0.1
-  - Initial public release
+    - Initial public release
 
 # Copyright and License
 
