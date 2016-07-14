@@ -83,6 +83,11 @@ export function removeIn(n, categoryName, address, uuid, RED) {
     if (ary.length === 0) {
       return false;
     }
+    if (uuid) {
+      RED.log.info(`[BLE] category=[${categoryName}], address=[${address}], uuid=[${uuid}], node ID=[${n.id}] has been removed.`);
+    } else {
+      RED.log.info(`[BLE] category=[${categoryName}], address=[${address}], node ID=[${n.id}] has been removed.`);
+    }
     return true;
   }
   return false;
