@@ -32,6 +32,9 @@ will generate ES5 js files.
 
 # Revision History
 
+* 1.2.0
+    - Reset BLE address cache on deploying nodes
+
 * 1.1.0
     - Fix an issue where registered BLE peripherals are remained after the corresponding nodes are gone
     - Update git repo URLs
