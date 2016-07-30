@@ -20,6 +20,11 @@ describe('asakusa_giken node', () => {
 	afterEach(() => {
 		sandbox = sandbox.restore();
 	});
+  describe('ble module', () => {
+    it('ble', () => {
+      ble.clear(RED);
+    });
+  });
   describe('asakusa_giken module', () => {
     it('should have valid Node-RED plugin classes', done => {
       assert.isNotNull(RED);

@@ -93,6 +93,11 @@ export function removeIn(n, categoryName, address, uuid, RED) {
   return false;
 }
 
+export function clear(RED) {
+  unknown.reset();
+  RED.log.info(`[BLE] Cache cleared`);
+}
+
 /**
  * Stop the BLE module immediately.
  * @param RED the initialized RED object
