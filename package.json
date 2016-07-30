@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-asakusa_giken",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Node-RED nodes for Asakusa Giken Devices",
   "license": "MIT",
   "repository": {
