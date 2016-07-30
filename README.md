@@ -14,13 +14,20 @@ This project offers the following BLE device nodes manufactured by Asakusa Giken
 1. [BLECAST_TM](http://www.robotsfx.com/robot/BLECAST_TM.html) ... BLE 温度センサー
 1. [BLECAST_BL](http://www.robotsfx.com/robot/BLECAST_BL.html) ... BLE 照度センサー
 
+# Install
+
+```
+cd ~/.node-red # or your own userDir where Node-RED saves flow file
+npm install --unsafe-perm node-red-contrib-asakusa_giken
+```
+
 # Development
 
 ## Tools
 
 Then, try this.
 ```
-$ npm install
+$ npm install --unsafe-perm
 ```
 
 ## How to build
