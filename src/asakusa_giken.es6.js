@@ -25,13 +25,18 @@ export default function(RED) {
         this.useString = n.useString;
         this.blecastBlNodeId = n.blecastBl;
         this.blecastBlNode = RED.nodes.getNode(this.blecastBlNodeId);
-        ble.registerIn(this, 'BLECAST_BL', this.blecastBlNode.address, this.blecastBlNode.uuid,
-          blecastBl.parse, this.useString, RED);
+        if (this.blecastBlNode) {
+          ble.registerIn(this, 'BLECAST_BL', this.blecastBlNode.address, this.blecastBlNode.uuid,
+            blecastBl.parse, this.useString, RED);
+        }
         this.name = n.name;
 
         this.on('close', () => {
-          ble.removeIn(this, 'BLECAST_BL', this.blecastBlNode.address, this.blecastBlNode.uuid, RED);
+          if (this.blecastBlNode) {
+            ble.removeIn(this, 'BLECAST_BL', this.blecastBlNode.address, this.blecastBlNode.uuid, RED);
+          }
         });
+        ble.clear(RED);
       }
     }
     RED.nodes.registerType('BLECAST_BL in', BlecastBlInNode);
@@ -51,13 +56,18 @@ export default function(RED) {
         this.useString = n.useString;
         this.blecastTmNodeId = n.blecastTm;
         this.blecastTmNode = RED.nodes.getNode(this.blecastTmNodeId);
-        ble.registerIn(this, 'BLECAST_TM', this.blecastTmNode.address, this.blecastTmNode.uuid,
-          blecastTm.parse, this.useString, RED);
+        if (this.blecastTmNode) {
+          ble.registerIn(this, 'BLECAST_TM', this.blecastTmNode.address, this.blecastTmNode.uuid,
+            blecastTm.parse, this.useString, RED);
+        }
         this.name = n.name;
 
         this.on('close', () => {
-          ble.removeIn(this, 'BLECAST_TM', this.blecastTmNode.address, this.blecastTmNode.uuid, RED);
+          if (this.blecastTmNode) {
+            ble.removeIn(this, 'BLECAST_TM', this.blecastTmNode.address, this.blecastTmNode.uuid, RED);
+          }
         });
+        ble.clear(RED);
       }
     }
     RED.nodes.registerType('BLECAST_TM in', BlecastTmInNode);

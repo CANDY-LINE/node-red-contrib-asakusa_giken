@@ -28,6 +28,16 @@ describe('asakusa_giken node', () => {
         assert.isNotNull(RED.nodes.getType('BLECAST_BL in').name);
         assert.isNotNull(RED.nodes.getType('BLECAST_TM').name);
         assert.isNotNull(RED.nodes.getType('BLECAST_TM in').name);
+
+        let BleCastBl = RED.nodes.getType('BLECAST_BL');
+        new BleCastBl({});
+        let BleCastBlIn = RED.nodes.getType('BLECAST_BL in');
+        new BleCastBlIn({});
+
+        let BleCastTm = RED.nodes.getType('BLECAST_TM');
+        new BleCastTm({});
+        let BleCastTmIn = RED.nodes.getType('BLECAST_TM in');
+        new BleCastTmIn({});
         ble.stop(RED);
         done();
       }).catch(err => {
