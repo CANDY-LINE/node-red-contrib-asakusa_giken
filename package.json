@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-asakusa_giken",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Node-RED nodes for Asakusa Giken Devices",
   "license": "MIT",
   "repository": {
@@ -33,9 +33,9 @@
     "babel-plugin-uglify": "^1.0.2",
     "uglify-js": "^2.6.1",
     "chai": "^3.3.0",
-    "node-red": "^0.14.4",
+    "node-red": "^0.14.6",
     "grunt-cli": "^0.1.13",
-    "grunt-babel": "^6.0.0",
+    "grunt-babel": "5.0.3",
     "grunt": ">=1.0.1 <2.0.0",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-copy": "^1.0.0",
