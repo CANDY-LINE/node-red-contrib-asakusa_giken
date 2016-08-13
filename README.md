@@ -1,6 +1,11 @@
 Asakusa Giken BLE device Node-RED nodes
 ===
 
+[![GitHub release](https://img.shields.io/github/release/CANDY-LINE/node-red-contrib-asakusa_giken.svg)](https://github.com/CANDY-LINE/node-red-contrib-asakusa_giken/releases/latest)
+[![master Build Status](https://travis-ci.org/CANDY-LINE/node-red-contrib-asakusa_giken.svg?branch=master)](https://travis-ci.org/CANDY-LINE/node-red-contrib-asakusa_giken/)
+[![License MIT](https://img.shields.io/github/license/CANDY-LINE/node-red-contrib-asakusa_giken.svg)](http://opensource.org/licenses/MIT)
+
+
 This project offers the following BLE device nodes manufactured by Asakusa Giken.
 
 1. [BLECAST_TM](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%2FBLECAST_TM.html) ... A BLE temperature sensor device
