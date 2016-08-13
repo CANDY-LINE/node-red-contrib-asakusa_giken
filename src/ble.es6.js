@@ -162,6 +162,9 @@ export function start(RED) {
         }
         // Remove a NULL terminator
         let categoryName = adv.localName.replace(new RegExp('\0', 'g'), '');
+        if (!categoryName || !~'BLECAST_TM BLECAST_BL'.indexOf(categoryName)) {
+          return; // Unsupported device
+        }
         // look up a category by the category name
         let category = peripheralsIn[categoryName];
         if (!category) {

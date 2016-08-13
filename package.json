@@ -26,6 +26,7 @@
     "bluetooth low energy",
     "bluetooth smart",
     "central",
+    "CANDY RED",
     "CANDY EGG"
   ],
   "devDependencies": {
@@ -38,8 +39,8 @@
     "grunt": ">=1.0.1 <2.0.0",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-jshint": "^1.0.0",
     "grunt-contrib-jshint": "^0.11.3",
+    "grunt-mocha-test": "^0.12.7",
     "grunt-run": "^0.6.0",
     "grunt-run": "^0.5.2",
     "jshint": "^2.9.1",
