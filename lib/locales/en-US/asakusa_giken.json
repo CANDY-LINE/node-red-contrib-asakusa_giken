@@ -18,6 +18,7 @@
     },
     "errors" : {
       "unknown-peripheral": "[BLE] Unknown peripheral: category=[__categoryName__], peripheral.address=[__peripheralAddress__], peripheral.uuid=[__peripheralUuid__]",
+      "wrong-category": "[BLE] The peripheral(address:[__peripheralAddress__], uuid:[__peripheralUuid__]) sohuld be defined in __correctCategory__ node (currently in __wrongCategory__ node)",
       "unknown-uuid": "[BLE] Unknown node: category=[__categoryName__], peripheral.uuid=[__peripheralUuid__]",
       "unknown-address": "[BLE] Unknown node: category=[__categoryName__], peripheral.address=[__peripheralAddress__]",
       "unknown" : "[BLE] Unknown Error (__error__)"

@@ -111,6 +111,14 @@ export function stop(RED) {
   }
 }
 
+function anotherCategory(cat) {
+  if (cat === 'BLECAST_TM') {
+    return 'BLECAST_BL';
+  } else {
+    return 'BLECAST_TM';
+  }
+}
+
 /**
  * Start the BLE module.
  * @param RED the initialized RED object
@@ -167,6 +175,17 @@ export function start(RED) {
         }
         // look up a category by the category name
         let category = peripheralsIn[categoryName];
+        let anotherName = anotherCategory(categoryName);
+        let another = peripheralsIn[anotherName];
+        if (another) {
+          if (another[peripheral.address] || another[peripheral.uuid]) {
+            RED.log.warn(RED._('asakusa_giken.errors.wrong-category',
+              { wrongCategory: categoryName, correctCategory: anotherName,
+                peripheralAddress: peripheral.address,
+                peripheralUuid: peripheral.uuid }));
+            return;
+          }
+        }
         if (!category) {
           let key = categoryName + ':' + peripheral.address + ':' + peripheral.uuid;
           if (!unknown.get(key)) {
