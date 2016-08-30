@@ -11,6 +11,8 @@ import * as blecastTm from './blecast_tm';
 
 export default function(RED) {
   let p = ble.start(RED).then(() => {
+
+    // BLECAST
     ble.registerDiscoverHandler(blecast.acceptFunc, blecast.discoverFunc);
     class BlecastBlNode {
       constructor(n) {
@@ -75,6 +77,7 @@ export default function(RED) {
     RED.nodes.registerType('BLECAST_TM in', BlecastTmInNode);
   });
 
+  // DEBUG
   if (RED.debug) {
     // Should not return anything except for test
     // since Node-RED tries to manipulate the return value unless it's null/undefined
