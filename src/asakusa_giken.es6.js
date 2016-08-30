@@ -17,7 +17,7 @@ export default function(RED) {
         this.uuid = n.uuid;
       }
     }
-    RED.nodes.registerType('BLECAST_BL', BlecastBlNode);
+    RED.nodes.registerType('', 'BLECAST_BL', BlecastBlNode);
 
     class BlecastBlInNode {
       constructor(n) {
@@ -39,7 +39,7 @@ export default function(RED) {
         ble.clear(RED);
       }
     }
-    RED.nodes.registerType('BLECAST_BL in', BlecastBlInNode);
+    RED.nodes.registerType('', 'BLECAST_BL in', BlecastBlInNode);
 
     class BlecastTmNode {
       constructor(n) {
@@ -48,7 +48,7 @@ export default function(RED) {
         this.uuid = n.uuid;
       }
     }
-    RED.nodes.registerType('BLECAST_TM', BlecastTmNode);
+    RED.nodes.registerType('', 'BLECAST_TM', BlecastTmNode);
 
     class BlecastTmInNode {
       constructor(n) {
