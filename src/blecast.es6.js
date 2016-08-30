@@ -95,7 +95,7 @@ export function removeIn(n, categoryName, address, uuid, RED) {
 
 export function clear(RED) {
   unknown.reset();
-  RED.log.info(`${TAG} Cache cleared`);
+  RED.log.info(`${TAG} Unknown cache cleared`);
 }
 
 function anotherCategory(cat) {
