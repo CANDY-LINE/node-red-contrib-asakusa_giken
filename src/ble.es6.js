@@ -7,6 +7,14 @@ let isScanning = false;
 let isMonitoring = false;
 let discoverHandlers = [];
 
+export function isScanning() {
+  return isScanning;
+}
+
+export function isMonitoring() {
+  return isMonitoring;
+}
+
 export function registerDiscoverHandler(acceptFunc, discoverFunc) {
   if (!acceptFunc || !discoverFunc) {
     return false;
