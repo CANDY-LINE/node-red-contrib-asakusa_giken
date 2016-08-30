@@ -4,6 +4,7 @@ import noble from 'noble';
 import Promise from 'es6-promises';
 import LRU from 'lru-cache';
 
+// key = categoryName, value = category store (key = address, value = array of category hanldler info)
 let peripheralsIn = {};
 let isScanning = false;
 let isMonitoring = false;
@@ -119,6 +120,109 @@ function anotherCategory(cat) {
   }
 }
 
+export function discoverBlecastFunc(categoryName, peripheral, RED) {
+  // look up a category by the category name
+  let category = peripheralsIn[categoryName];
+  let anotherName = anotherCategory(categoryName);
+  let another = peripheralsIn[anotherName];
+  if (another) {
+    if (another[peripheral.address] || another[peripheral.uuid]) {
+      RED.log.warn(RED._('asakusa_giken.errors.wrong-category',
+        { wrongCategory: categoryName, correctCategory: anotherName,
+          peripheralAddress: peripheral.address,
+          peripheralUuid: peripheral.uuid }));
+      return false;
+    }
+  }
+  if (!category) {
+    let key = categoryName + ':' + peripheral.address + ':' + peripheral.uuid;
+    if (!unknown.get(key)) {
+      unknown.set(key, 1);
+      RED.log.warn(RED._('asakusa_giken.errors.unknown-peripheral',
+        { categoryName: categoryName, peripheralAddress: peripheral.address, peripheralUuid: peripheral.uuid }));
+    }
+    return false;
+  }
+  // check if the peripheral.address matches
+  let address = peripheral.address;
+  let uuid = null;
+  let bleNodes = null;
+  if (address === 'unknown') {
+    uuid = peripheral.uuid;
+    bleNodes = category[uuid];
+    if (!bleNodes || bleNodes.length === 0) {
+      let key = categoryName + ':' + uuid;
+      if (!unknown.get(key)) {
+        unknown.set(key, 1);
+        RED.log.warn(RED._('asakusa_giken.errors.unknown-uuid',
+          { categoryName: categoryName, peripheralUuid: uuid }));
+      }
+      return false;
+    }
+  }
+  if (!uuid) {
+    if (address.indexOf('-') >= 0) {
+      address = address.replace(new RegExp('-', 'g'), ':');
+    }
+    bleNodes = category[address];
+    if (!bleNodes || bleNodes.length === 0) {
+      let key = categoryName + ':' + address;
+      if (!unknown.get(key)) {
+        unknown.set(key, 1);
+        RED.log.warn(RED._('asakusa_giken.errors.unknown-address',
+          { categoryName: categoryName, peripheralAddress: address }));
+      }
+      return false;
+    }
+  }
+  // send the ble node a payload if the address exists
+  let removed = false;
+  bleNodes = bleNodes.filter(ele => {
+    let node = RED.nodes.getNode(ele.id);
+    if (!node) {
+      removed = true;
+      return false;
+    }
+    let payload = ele.parse(adv.manufacturerData);
+    payload.tstamp = Date.now();
+    payload.rssi = peripheral.rssi;
+    payload.address = address;
+    if (uuid) {
+      payload.uuid = uuid;
+    }
+    if (ele.useString) {
+      payload = JSON.stringify(payload);
+    }
+    node.send({'payload': payload});
+    return true;
+  });
+  if (removed) {
+    category[uuid] = bleNodes;
+    if (address !== 'unknown') {
+      category[address] = bleNodes;
+    }
+  }
+  return true;
+}
+
+export function discoverFuncFactory(RED) {
+  return function(peripheral) {
+    let adv = peripheral.advertisement;
+    if (!adv.localName) {
+      return false;
+    }
+    // Remove a NULL terminator
+    let categoryName = adv.localName.replace(new RegExp('\0', 'g'), '');
+    if (!categoryName) {
+      return false;
+    }
+    if (~'BLECAST_TM BLECAST_BL'.indexOf(categoryName)) {
+      return discoverBlecastFunc(categoryName, peripheral, RED);
+    }
+    return false; // Unknown category name
+  };
+}
+
 /**
  * Start the BLE module.
  * @param RED the initialized RED object
@@ -163,98 +267,7 @@ export function start(RED) {
         return resolve();
       }
       isMonitoring = true;
-      noble.on('discover', peripheral => {
-        let adv = peripheral.advertisement;
-        if (!adv.localName) {
-          return;
-        }
-        // Remove a NULL terminator
-        let categoryName = adv.localName.replace(new RegExp('\0', 'g'), '');
-        if (!categoryName || !~'BLECAST_TM BLECAST_BL'.indexOf(categoryName)) {
-          return; // Unsupported device
-        }
-        // look up a category by the category name
-        let category = peripheralsIn[categoryName];
-        let anotherName = anotherCategory(categoryName);
-        let another = peripheralsIn[anotherName];
-        if (another) {
-          if (another[peripheral.address] || another[peripheral.uuid]) {
-            RED.log.warn(RED._('asakusa_giken.errors.wrong-category',
-              { wrongCategory: categoryName, correctCategory: anotherName,
-                peripheralAddress: peripheral.address,
-                peripheralUuid: peripheral.uuid }));
-            return;
-          }
-        }
-        if (!category) {
-          let key = categoryName + ':' + peripheral.address + ':' + peripheral.uuid;
-          if (!unknown.get(key)) {
-            unknown.set(key, 1);
-            RED.log.warn(RED._('asakusa_giken.errors.unknown-peripheral',
-              { categoryName: categoryName, peripheralAddress: peripheral.address, peripheralUuid: peripheral.uuid }));
-          }
-          return;
-        }
-        // check if the peripheral.address matches
-        let address = peripheral.address;
-        let uuid = null;
-        let bleNodes = null;
-        if (address === 'unknown') {
-          uuid = peripheral.uuid;
-          bleNodes = category[uuid];
-          if (!bleNodes || bleNodes.length === 0) {
-            let key = categoryName + ':' + uuid;
-            if (!unknown.get(key)) {
-              unknown.set(key, 1);
-              RED.log.warn(RED._('asakusa_giken.errors.unknown-uuid',
-                { categoryName: categoryName, peripheralUuid: uuid }));
-            }
-            return;
-          }
-        }
-        if (!uuid) {
-          if (address.indexOf('-') >= 0) {
-            address = address.replace(new RegExp('-', 'g'), ':');
-          }
-          bleNodes = category[address];
-          if (!bleNodes || bleNodes.length === 0) {
-            let key = categoryName + ':' + address;
-            if (!unknown.get(key)) {
-              unknown.set(key, 1);
-              RED.log.warn(RED._('asakusa_giken.errors.unknown-address',
-                { categoryName: categoryName, peripheralAddress: address }));
-            }
-            return;
-          }
-        }
-        // send the ble node a payload if the address exists
-        let removed = false;
-        bleNodes = bleNodes.filter(ele => {
-          let node = RED.nodes.getNode(ele.id);
-          if (!node) {
-            removed = true;
-            return false;
-          }
-          let payload = ele.parse(adv.manufacturerData);
-          payload.tstamp = Date.now();
-          payload.rssi = peripheral.rssi;
-          payload.address = address;
-          if (uuid) {
-            payload.uuid = uuid;
-          }
-          if (ele.useString) {
-            payload = JSON.stringify(payload);
-          }
-          node.send({'payload': payload});
-          return true;
-        });
-        if (removed) {
-          category[uuid] = bleNodes;
-          if (address !== 'unknown') {
-            category[address] = bleNodes;
-          }
-        }
-      });
+      noble.on('discover', discoverFuncFactory(RED));
       resolve();
       RED.log.info(RED._('asakusa_giken.message.setup-done'));
     });

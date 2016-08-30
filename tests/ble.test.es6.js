@@ -20,6 +20,26 @@ describe('ble module', () => {
 	afterEach(() => {
 		sandbox = sandbox.restore();
 	});
+	describe('discoverFunc()', () => {
+		it('should return false if an error detected while performing it', done => {
+			assert.isFalse(ble.discoverFuncFactory(RED)({
+				advertisement: {
+					localName: ''
+				}
+			}));
+			assert.isFalse(ble.discoverFuncFactory(RED)({
+				advertisement: {
+					localName: '\0'
+				}
+			}));
+			assert.isFalse(ble.discoverFuncFactory(RED)({
+				advertisement: {
+					localName: 'BLECAST_TM\0'
+				}
+			}));
+			done();
+		});
+	});
 	describe('removeIn', () => {
     it('should remove node from peripheralsIn[category]', done => {
 			ble.registerIn({id:1}, 'BLECAST_TM', 'address1', 'uuid1',
