@@ -10,6 +10,7 @@ This project offers the following BLE device nodes manufactured by Asakusa Giken
 
 1. [BLECAST_TM](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%2FBLECAST_TM.html) ... A BLE temperature sensor device
 1. [BLECAST_BL](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%2FBLECAST_BL.html) ... A BLE illuminance sensor device
+1. [BLEIo](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%2FBLEIo.html) ... GPIO BLE module
 
 浅草ギ研 BLECAST Node-RED ノード
 ===
@@ -18,6 +19,7 @@ This project offers the following BLE device nodes manufactured by Asakusa Giken
 
 1. [BLECAST_TM](http://www.robotsfx.com/robot/BLECAST_TM.html) ... BLE 温度センサー
 1. [BLECAST_BL](http://www.robotsfx.com/robot/BLECAST_BL.html) ... BLE 照度センサー
+1. [BLEIo](http://www.robotsfx.com/robot/BLEIo.html) ... 汎用I/O BLEモジュール
 
 # Install
 
@@ -43,6 +45,8 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* x.x.x
+    - Add a new node for BLEIo
 
 * 1.2.0
     - Reset BLE address cache on deploying nodes
