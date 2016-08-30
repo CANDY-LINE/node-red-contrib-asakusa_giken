@@ -4,12 +4,14 @@
  * BLECAST_TM (BLE with Temeprature Sensor) node
  */
 
+import * as ble from './ble';
+import * as blecast from './blecast';
 import * as blecastBl from './blecast_bl';
 import * as blecastTm from './blecast_tm';
-import * as ble from './ble';
 
 export default function(RED) {
   let p = ble.start(RED).then(() => {
+    ble.registerDiscoverHandler(blecast.acceptFunc, blecast.discoverFunc);
     class BlecastBlNode {
       constructor(n) {
         RED.nodes.createNode(this, n);
@@ -26,17 +28,17 @@ export default function(RED) {
         this.blecastBlNodeId = n.blecastBl;
         this.blecastBlNode = RED.nodes.getNode(this.blecastBlNodeId);
         if (this.blecastBlNode) {
-          ble.registerIn(this, 'BLECAST_BL', this.blecastBlNode.address, this.blecastBlNode.uuid,
+          blecast.registerIn(this, 'BLECAST_BL', this.blecastBlNode.address, this.blecastBlNode.uuid,
             blecastBl.parse, this.useString, RED);
         }
         this.name = n.name;
 
         this.on('close', () => {
           if (this.blecastBlNode) {
-            ble.removeIn(this, 'BLECAST_BL', this.blecastBlNode.address, this.blecastBlNode.uuid, RED);
+            blecast.removeIn(this, 'BLECAST_BL', this.blecastBlNode.address, this.blecastBlNode.uuid, RED);
           }
         });
-        ble.clear(RED);
+        blecast.clear(RED);
       }
     }
     RED.nodes.registerType('', 'BLECAST_BL in', BlecastBlInNode);
@@ -57,17 +59,17 @@ export default function(RED) {
         this.blecastTmNodeId = n.blecastTm;
         this.blecastTmNode = RED.nodes.getNode(this.blecastTmNodeId);
         if (this.blecastTmNode) {
-          ble.registerIn(this, 'BLECAST_TM', this.blecastTmNode.address, this.blecastTmNode.uuid,
+          blecast.registerIn(this, 'BLECAST_TM', this.blecastTmNode.address, this.blecastTmNode.uuid,
             blecastTm.parse, this.useString, RED);
         }
         this.name = n.name;
 
         this.on('close', () => {
           if (this.blecastTmNode) {
-            ble.removeIn(this, 'BLECAST_TM', this.blecastTmNode.address, this.blecastTmNode.uuid, RED);
+            blecast.removeIn(this, 'BLECAST_TM', this.blecastTmNode.address, this.blecastTmNode.uuid, RED);
           }
         });
-        ble.clear(RED);
+        blecast.clear(RED);
       }
     }
     RED.nodes.registerType('BLECAST_TM in', BlecastTmInNode);

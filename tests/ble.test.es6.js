@@ -20,8 +20,19 @@ describe('ble module', () => {
 	afterEach(() => {
 		sandbox = sandbox.restore();
 	});
+	describe('registerDiscoverHandler()', () => {
+		it('should not add a new handler if given functions are invalid', () => {
+			assert.isFalse(ble.registerDiscoverHandler());
+			assert.isFalse(ble.registerDiscoverHandler(function() {}));
+			assert.isFalse(ble.registerDiscoverHandler(null, function() {}));
+		});
+		it('should not add a duplicate accept function', () => {
+			assert.isTrue(ble.registerDiscoverHandler(function() {}, function() {}));
+			assert.isFalse(ble.registerDiscoverHandler(function() {}, function() {}));
+		});
+	});
 	describe('discoverFunc()', () => {
-		it('should return false if an error detected while performing it', done => {
+		it('should return false if an error detected while performing it', () => {
 			assert.isFalse(ble.discoverFuncFactory(RED)({
 				advertisement: {
 					localName: ''
@@ -37,16 +48,6 @@ describe('ble module', () => {
 					localName: 'BLECAST_TM\0'
 				}
 			}));
-			done();
-		});
-	});
-	describe('removeIn', () => {
-    it('should remove node from peripheralsIn[category]', done => {
-			ble.registerIn({id:1}, 'BLECAST_TM', 'address1', 'uuid1',
-				() => {}, false, RED);
-			assert.isTrue(ble.removeIn({id:1}, 'BLECAST_TM', 'address1', 'uuid1', RED));
-			assert.isFalse(ble.removeIn({id:1}, 'BLECAST_TM', 'address1', 'uuid1', RED));
-			done();
 		});
 	});
 });
