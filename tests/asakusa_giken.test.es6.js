@@ -1,5 +1,6 @@
 'use strict';
 
+import 'source-map-support/register';
 import * as sinon from 'sinon';
 import { assert } from 'chai';
 import RED from 'node-red';
