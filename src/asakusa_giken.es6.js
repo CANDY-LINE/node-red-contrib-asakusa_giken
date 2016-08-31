@@ -8,9 +8,68 @@ import * as ble from './ble';
 import * as blecast from './blecast';
 import * as blecastBl from './blecast_bl';
 import * as blecastTm from './blecast_tm';
+import * as bleio from './bleio';
 
 export default function(RED) {
   let p = ble.start(RED).then(() => {
+
+    // BLEIo
+    ble.registerDiscoverHandler(bleio.acceptFunc, bleio.discoverFunc);
+    class BLEIoNode {
+      constructor(n) {
+        RED.nodes.createNode(this, n);
+        this.localName = n.localName;
+        this.address = n.address; // can be empty
+        this.uuid = n.uuid; // can be empty
+      }
+    }
+    RED.nodes.registerType('', 'BLEIo', BLEIoNode);
+
+    class BLEIoInNode {
+      constructor(n) {
+        RED.nodes.createNode(this, n);
+        this.in = true;
+        this.peripheral = null;
+        this.useString = n.useString;
+        this.bleioNodeId = n.bleio;
+        this.bleioNode = RED.nodes.getNode(this.bleioNodeId);
+        if (this.bleioNode) {
+          bleio.register(this, RED);
+        }
+        this.name = n.name;
+
+        this.on('close', () => {
+          if (this.bleioNode) {
+            bleio.remove(this, RED);
+          }
+        });
+        bleio.clear(RED);
+      }
+    }
+    RED.nodes.registerType('', 'BLEIo in', BLEIoInNode);
+
+    class BLEIoOutNode {
+      constructor(n) {
+        RED.nodes.createNode(this, n);
+        this.in = false;
+        this.peripheral = null;
+        this.useString = n.useString;
+        this.bleioNodeId = n.bleio;
+        this.bleioNode = RED.nodes.getNode(this.bleioNodeId);
+        if (this.bleioNode) {
+          bleio.register(this, RED);
+        }
+        this.name = n.name;
+
+        this.on('close', () => {
+          if (this.bleioNode) {
+            bleio.remove(this, RED);
+          }
+        });
+        bleio.clear(RED);
+      }
+    }
+    RED.nodes.registerType('', 'BLEIo out', BLEIoOutNode);
 
     // BLECAST
     ble.registerDiscoverHandler(blecast.acceptFunc, blecast.discoverFunc);

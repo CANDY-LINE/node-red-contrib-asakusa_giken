@@ -17,6 +17,8 @@
       "setup-done": "[BLE] Set up done"
     },
     "errors" : {
+      "unexpected-peripheral": "[BLE] Unexpected peripheral, disconnecting",
+      "missing-localName": "[BLE] Missing localName for the node [__id__]",
       "unknown-peripheral": "[BLE] Unknown peripheral: category=[__categoryName__], peripheral.address=[__peripheralAddress__], peripheral.uuid=[__peripheralUuid__]",
       "wrong-category": "[BLE] The peripheral(address:[__peripheralAddress__], uuid:[__peripheralUuid__]) sohuld be defined in __correctCategory__ node (currently in __wrongCategory__ node)",
       "unknown-uuid": "[BLE] Unknown node: category=[__categoryName__], peripheral.uuid=[__peripheralUuid__]",
