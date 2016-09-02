@@ -80,7 +80,7 @@ function findChr(uuid, characteristics) {
 }
 
 function valToBuffer(hexOrIntArray) {
-  if (buffer.isBuffer(hexOrIntArray)) {
+  if (Buffer.isBuffer(hexOrIntArray)) {
     return hexOrIntArray;
   }
   if (typeof hexOrIntArray === 'string') {
