@@ -157,7 +157,7 @@ function setupPeripheral(peripheral, RED) {
                     return;
                   }
                   let data = valToBuffer(v.val);
-                  findChr(uuid, characteristics).write(data, false);
+                  findChr(uuid, characteristics).write(data, true);
                 });
               });
             }
