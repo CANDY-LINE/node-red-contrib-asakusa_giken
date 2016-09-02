@@ -12,21 +12,21 @@ RED.init(server, settings);
 
 describe('blecast module', () => {
   RED.debug = true;
-	let sandbox;
-	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+  let sandbox;
+  beforeEach(() => {
+    sandbox = sinon.sandbox.create();
     RED._ = sinon.spy();
-	});
-	afterEach(() => {
-		sandbox = sandbox.restore();
-	});
-	describe('removeIn', () => {
+  });
+  afterEach(() => {
+    sandbox = sandbox.restore();
+  });
+  describe('removeIn', () => {
     it('should remove node from peripheralsIn[category]', done => {
-			blecast.registerIn({id:1}, 'BLECAST_TM', 'address1', 'uuid1',
-				() => {}, false, RED);
-			assert.isTrue(blecast.removeIn({id:1}, 'BLECAST_TM', 'address1', 'uuid1', RED));
-			assert.isFalse(blecast.removeIn({id:1}, 'BLECAST_TM', 'address1', 'uuid1', RED));
-			done();
-		});
-	});
+      blecast.registerIn({id:1}, 'BLECAST_TM', 'address1', 'uuid1',
+        () => {}, false, RED);
+      assert.isTrue(blecast.removeIn({id:1}, 'BLECAST_TM', 'address1', 'uuid1', RED));
+      assert.isFalse(blecast.removeIn({id:1}, 'BLECAST_TM', 'address1', 'uuid1', RED));
+      done();
+    });
+  });
 });

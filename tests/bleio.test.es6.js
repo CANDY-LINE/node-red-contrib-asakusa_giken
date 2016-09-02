@@ -87,80 +87,81 @@ RED.init(server, settings);
 
 describe('bleio module', () => {
   RED.debug = true;
-	let sandbox;
-	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+  let sandbox;
+  beforeEach(() => {
+    sandbox = sinon.sandbox.create();
     RED._ = sinon.spy();
-	});
-	afterEach(() => {
-		sandbox = sandbox.restore();
-	});
-	describe('acceptFunc()', () => {
-		it('should return true if localName starts with BLEIo_ and its length is 7', () => {
-			assert.isTrue(bleio.acceptFunc('BLEIo_0'));
-			assert.isTrue(bleio.acceptFunc('BLEIo_F'));
-			assert.isFalse(bleio.acceptFunc('BLEIo_01'));
-			assert.isFalse(bleio.acceptFunc(''));
-			assert.isFalse(bleio.acceptFunc(null));
-		});
-	});
-	describe('registration and removal', () => {
-		let testPeripheral;
-		let testNode;
-		let testPeripheral2;
-		let testNode2;
+  });
+  afterEach(() => {
+    sandbox = sandbox.restore();
+  });
+  describe('acceptFunc()', () => {
+    it('should return true if localName starts with BLEIo_ and its length is 7', () => {
+      assert.isTrue(bleio.acceptFunc('BLEIo_0'));
+      assert.isTrue(bleio.acceptFunc('BLEIo_F'));
+      assert.isFalse(bleio.acceptFunc('BLEIo_01'));
+      assert.isFalse(bleio.acceptFunc(''));
+      assert.isFalse(bleio.acceptFunc(null));
+    });
+  });
+  describe('registration and removal', () => {
+    let testPeripheral;
+    let testNode;
+    let testPeripheral2;
+    let testNode2;
     let characteristics;
-		let sandbox;
-		beforeEach(() => {
-	    sandbox = sinon.sandbox.create();
-			testPeripheral = sandbox.stub({
-				on: () => {},
-				discoverSomeServicesAndCharacteristics: () => {},
-				disconnect: () => {},
-				connect: () => {},
+    let sandbox;
+    beforeEach(() => {
+      sandbox = sinon.sandbox.create();
+      testPeripheral = sandbox.stub({
+        on: () => {},
+        discoverSomeServicesAndCharacteristics: () => {},
+        disconnect: () => {},
+        connect: () => {},
         terminate: () => {},
-				address: 'CC:5E:66:DD:0B:88',
-				test: true
-			});
+        address: 'CC:5E:66:DD:0B:88',
+        test: true
+      });
       testNode = sandbox.stub({
         send: () => {},
         in: false,
-  			bleioNode: {
-  				localName: 'BLEIo_0',
-  				address: 'CC:5E:66:DD:0B:88'
-  			},
-  			id: '1111'
-  		});
-			testPeripheral2 = sandbox.stub({
-				on: () => {},
-				discoverSomeServicesAndCharacteristics: () => {},
-				disconnect: () => {},
-				connect: () => {},
+        bleioNode: {
+          localName: 'BLEIo_0',
+          address: 'CC:5E:66:DD:0B:88'
+        },
+        id: '1111'
+      });
+      testPeripheral2 = sandbox.stub({
+        on: () => {},
+        discoverSomeServicesAndCharacteristics: () => {},
+        disconnect: () => {},
+        connect: () => {},
         terminate: () => {},
-				address: 'FF:5E:66:DD:0B:FF',
-				test: true
-			});
+        address: 'FF:5E:66:DD:0B:FF',
+        test: true
+      });
       testNode2 = sandbox.stub({
         send: () => {},
         in: false,
-  			bleioNode: {
-  				localName: 'BLEIo_F',
-  				address: ''
-  			},
-  			id: '2222'
-  		});
+        bleioNode: {
+          localName: 'BLEIo_F',
+          address: ''
+        },
+        id: '2222'
+      });
       characteristics = BLEIO_CHARS.map((c) => {
         return sandbox.stub(c);
       });
-	  });
-	  afterEach(() => {
-	    sandbox = sandbox.restore();
-	  });
+    });
+    afterEach(() => {
+      sandbox = sandbox.restore();
+    });
 
-		describe('register()', () => {
-	    it('should register a new node', done => {
+    describe('register()', () => {
+      it('should register a new node', done => {
         // connect
-        testPeripheral.on.onFirstCall().yields(null);testPeripheral.discoverSomeServicesAndCharacteristics.yields(
+        testPeripheral.on.onFirstCall().yields(null);
+        testPeripheral.discoverSomeServicesAndCharacteristics.yields(
           null, null, characteristics);
         characteristics.forEach((c) => {
           // on('data') => node.send()
@@ -168,41 +169,41 @@ describe('bleio module', () => {
         });
 
         // disconnect
-				testPeripheral.on.onSecondCall().yields(null);
+        testPeripheral.on.onSecondCall().yields(null);
 
-				delete testNode.peripheral;
-				bleio.register(testNode, RED);
-				function waitUntilDone() {
-					if (testNode.peripheral) {
+        delete testNode.peripheral;
+        bleio.register(testNode, RED);
+        function waitUntilDone() {
+          if (testNode.peripheral) {
             assert.equal(2, characteristics.filter((c) => {
               return c.subscribed;
             }).length);
             assert.isTrue(testNode.send.called);
-						return done();
-					}
-					setTimeout(waitUntilDone, 1000);
-				}
-				setTimeout(() => {
-					bleio.discoverFunc('BLEIo_0', testPeripheral, RED);
-					waitUntilDone();
-				}, 2000);
-			}).timeout(10000);
-			it('should register a new node with wildcard', done => {
-				delete testNode2.peripheral;
-				bleio.register(testNode2, RED);
-				function waitUntilDone() {
-					if (testNode2.peripheral) {
-						return done();
-					}
-					setTimeout(waitUntilDone, 1000);
-				}
-				setTimeout(() => {
-					bleio.discoverFunc('BLEIo_F', testPeripheral2, RED);
-					waitUntilDone();
-				}, 2000);
-			}).timeout(10000);
-		});
-	});
+            return done();
+          }
+          setTimeout(waitUntilDone, 1000);
+        }
+        setTimeout(() => {
+          bleio.discoverFunc('BLEIo_0', testPeripheral, RED);
+          waitUntilDone();
+        }, 2000);
+      }).timeout(10000);
+      it('should register a new node with wildcard', done => {
+        delete testNode2.peripheral;
+        bleio.register(testNode2, RED);
+        function waitUntilDone() {
+          if (testNode2.peripheral) {
+            return done();
+          }
+          setTimeout(waitUntilDone, 1000);
+        }
+        setTimeout(() => {
+          bleio.discoverFunc('BLEIo_F', testPeripheral2, RED);
+          waitUntilDone();
+        }, 2000);
+      }).timeout(10000);
+    });
+  });
 });
 
 describe('registration and removal without stub', () => {
