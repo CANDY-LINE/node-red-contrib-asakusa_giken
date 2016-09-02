@@ -10,6 +10,26 @@ const CHR_DIN_UUID = 'feedaa04594246d5ade581c064d03a03';       // R/N
 const CHR_AIN_UUID = 'feedaa05594246d5ade581c064d03a03';       // R/N
 const CHR_LCD_UUID = 'feedaa06594246d5ade581c064d03a03';       // R/W
 const CHR_PWM_UUID = 'feedaa07594246d5ade581c064d03a03';       // R/W
+const TYPE_INTERVAL = 'INTERVAL';
+const TYPE_DOUT = 'DOUT';
+const TYPE_DIN = 'DIN';
+const TYPE_AIN = 'AIN';
+const TYPE_LCD = 'LCD';
+const TYPE_PWM = 'PWM';
+const UUID_TO_TYPE = {};
+UUID_TO_TYPE[CHR_INTERVAL_UUID] = TYPE_INTERVAL;
+UUID_TO_TYPE[CHR_DOUT_UUID] = TYPE_DOUT;
+UUID_TO_TYPE[CHR_DIN_UUID] = TYPE_DIN;
+UUID_TO_TYPE[CHR_AIN_UUID] = TYPE_AIN;
+UUID_TO_TYPE[CHR_LCD_UUID] = TYPE_LCD;
+UUID_TO_TYPE[CHR_PWM_UUID] = TYPE_PWM;
+const TYPE_TO_UUID = {};
+TYPE_TO_UUID[TYPE_INTERVAL] = CHR_INTERVAL_UUID;
+TYPE_TO_UUID[TYPE_DOUT] = CHR_DOUT_UUID;
+TYPE_TO_UUID[TYPE_DIN] = CHR_DIN_UUID;
+TYPE_TO_UUID[TYPE_AIN] = CHR_AIN_UUID;
+TYPE_TO_UUID[TYPE_LCD] = CHR_LCD_UUID;
+TYPE_TO_UUID[TYPE_PWM] = CHR_PWM_UUID;
 
 /*
  * {
@@ -50,6 +70,25 @@ export function discoverFunc(localName, peripheral, RED) {
   }
 }
 
+function findChr(uuid, characteristics) {
+  for (let i in characteristics) {
+    if (characteristics[i].uuid === uuid) {
+      return characteristics[i];
+    }
+  }
+  return null;
+}
+
+function valToBuffer(hexOrIntArray) {
+  if (typeof hexOrIntArray === 'string') {
+    return new Buffer(hexOrIntArray, 'hex');
+  }
+  if (Array.isArray(hexOrIntArray)) {
+    return new Buffer(hexOrIntArray);
+  }
+  return new Buffer();
+}
+
 function setupPeripheral(peripheral, RED) {
   peripheral.on('connect', (err) => {
     if (err) {
@@ -64,11 +103,62 @@ function setupPeripheral(peripheral, RED) {
         CHR_AIN_UUID,
         CHR_LCD_UUID,
         CHR_PWM_UUID
-      ], (err) => {
+      ], (err, _, characteristics) => {
         if (err) {
           RED.log.error(RED._('asakusa_giken.errors.unexpected-peripheral'));
           peripheral.disconnect();
           return;
+        }
+        characteristics.forEach((c) => {
+          let uuid = c.uuid.toLowerCase();
+          // in nodes
+          if (!c.subscribed &&
+              ((uuid === CHR_DIN_UUID) || (uuid === CHR_AIN_UUID))) {
+            c.subscribe();
+            c.on('data', (data, isNotification) => {
+              if (isNotification && peripheral.nodes) {
+                peripheral.nodes.forEach((node) => {
+                  if (!node.in) {
+                    node.send({
+                      payload: {
+                        type: UUID_TO_TYPE[uuid],
+                        val: data
+                      }
+                    });
+                  }
+                });
+              }
+            });
+            c.subscribed = true;
+            RED.log.info(`[BLEIo] Subscribed to ${UUID_TO_TYPE[uuid]}`);
+          }
+        });
+        // out nodes
+        if (peripheral.nodes) {
+          peripheral.nodes.forEach((node) => {
+            if (node.in) {
+              node.on('input', (msg) => {
+                let values = msg.payload;
+                if (!values) {
+                  return;
+                }
+                if (!Array.isArray(values)) {
+                  values = [values];
+                }
+                values.forEach((v) => {
+                  if (!v.type) {
+                    return;
+                  }
+                  let uuid = TYPE_TO_UUID[v.type];
+                  if (!uuid) {
+                    return;
+                  }
+                  let data = valToBuffer(v.val);
+                  findChr(uuid, characteristics).write(data, false);
+                });
+              });
+            }
+          });
         }
       }
     );
@@ -182,15 +272,15 @@ export function remove(node, RED) {
   }
   let localName = node.bleioNode.localName;
   if (!localName) {
-    return;
+    return false;
   }
   let address = node.bleioNode.address || '*';
   if (!bleioNodes[localName]) {
-    return;
+    return false;
   }
   let periphNodes = bleioNodes[localName];
   if (!periphNodes[address] || !periphNodes[address][node.id]) {
-    return;
+    return false;
   }
   let peripheral = periphNodes[address][node.id].peripheral;
   let periphHoldingNodes = peripheral.nodes;
@@ -200,9 +290,10 @@ export function remove(node, RED) {
   }
   delete periphNodes[address][node.id].peripheral;
   delete periphNodes[address][node.id];
-  if (periphNodes.length === 0) {
+  if (Object.keys(periphNodes[address]).length === 0) {
     peripheral.terminate();
   }
+  return true;
 }
 
 export function clear() {

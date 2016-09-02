@@ -6,6 +6,81 @@ import { assert } from 'chai';
 import RED from 'node-red';
 import * as bleio from '../lib/bleio';
 
+const BLEIO_CHARS = [
+  {
+    subscribe: () => {},
+    on: () => {},
+    uuid:'feedaa02594246d5ade581c064d03a03',
+    name:null,
+    type:null,
+    properties:[
+      'read',
+      'write'
+    ],
+    descriptors:null,
+  },
+  {
+    subscribe: () => {},
+    on: () => {},
+    uuid:'feedaa03594246d5ade581c064d03a03',
+    name:null,
+    type:null,
+    properties:[
+      'read',
+      'write'
+    ],
+    descriptors:null
+  },
+  {
+    subscribe: () => {},
+    on: () => {},
+    uuid:'feedaa04594246d5ade581c064d03a03',
+    name:null,
+    type:null,
+    properties:[
+      'read',
+      'notify'
+    ],
+    descriptors:null
+  },
+  {
+    subscribe: () => {},
+    on: () => {},
+    uuid:'feedaa05594246d5ade581c064d03a03',
+    name:null,
+    type:null,
+    properties:[
+      'read',
+      'notify'
+    ],
+    descriptors:null
+  },
+  {
+    subscribe: () => {},
+    on: () => {},
+    uuid:'feedaa06594246d5ade581c064d03a03',
+    name:null,
+    type:null,
+    properties:[
+      'read',
+      'write'
+    ],
+    descriptors:null
+  },
+  {
+    subscribe: () => {},
+    on: () => {},
+    uuid:'feedaa07594246d5ade581c064d03a03',
+    name:null,
+    type:null,
+    properties:[
+      'read',
+      'write'
+    ],
+    descriptors:null
+  }
+];
+
 let server = sinon.spy();
 let settings = sinon.spy();
 RED.init(server, settings);
@@ -30,42 +105,76 @@ describe('bleio module', () => {
 		});
 	});
 	describe('registration and removal', () => {
-		let testPeripheral = {
-			on: () => {},
-			discoverAllServicesAndCharacteristics: () => {},
-			disconnect: () => {},
-			connect: () => {},
-			address: 'CC:5E:66:DD:0B:88',
-			test: true
-		};
-		let testNode = {
-			bleioNode: {
-				localName: 'BLEIo_0',
-				address: 'CC:5E:66:DD:0B:88'
-			},
-			id: '1111'
-		};
-		let testPeripheral2 = {
-			on: () => {},
-			discoverAllServicesAndCharacteristics: () => {},
-			disconnect: () => {},
-			connect: () => {},
-			address: 'FF:5E:66:DD:0B:FF',
-			test: true
-		};
-		let testNode2 = {
-			bleioNode: {
-				localName: 'BLEIo_F',
-				address: ''
-			},
-			id: '2222'
-		};
+		let testPeripheral;
+		let testNode;
+		let testPeripheral2;
+		let testNode2;
+    let characteristics;
+		let sandbox;
+		beforeEach(() => {
+	    sandbox = sinon.sandbox.create();
+			testPeripheral = sandbox.stub({
+				on: () => {},
+				discoverAllServicesAndCharacteristics: () => {},
+				disconnect: () => {},
+				connect: () => {},
+        terminate: () => {},
+				address: 'CC:5E:66:DD:0B:88',
+				test: true
+			});
+      testNode = sandbox.stub({
+        send: () => {},
+        in: false,
+  			bleioNode: {
+  				localName: 'BLEIo_0',
+  				address: 'CC:5E:66:DD:0B:88'
+  			},
+  			id: '1111'
+  		});
+			testPeripheral2 = sandbox.stub({
+				on: () => {},
+				discoverAllServicesAndCharacteristics: () => {},
+				disconnect: () => {},
+				connect: () => {},
+        terminate: () => {},
+				address: 'FF:5E:66:DD:0B:FF',
+				test: true
+			});
+      testNode2 = sandbox.stub({
+        send: () => {},
+        in: false,
+  			bleioNode: {
+  				localName: 'BLEIo_F',
+  				address: ''
+  			},
+  			id: '2222'
+  		});
+      characteristics = BLEIO_CHARS.map((c) => {
+        return sandbox.stub(c);
+      });
+	  });
+	  afterEach(() => {
+	    sandbox = sandbox.restore();
+	  });
+
 		describe('register()', () => {
 	    it('should register a new node', done => {
+				testPeripheral.on.onFirstCall().yields(null);
+				testPeripheral.discoverAllServicesAndCharacteristics.yields(
+          null, null, characteristics);
+        characteristics.forEach((c) => {
+          // on('data') => node.send()
+          c.on.yields(new Buffer('12', 'hex'), true);
+        });
+
 				delete testNode.peripheral;
 				bleio.register(testNode, RED);
 				function waitUntilDone() {
 					if (testNode.peripheral) {
+            assert.equal(2, characteristics.filter((c) => {
+              return c.subscribed;
+            }).length);
+            assert.isTrue(testNode.send.called);
 						return done();
 					}
 					setTimeout(waitUntilDone, 1000);
@@ -90,18 +199,81 @@ describe('bleio module', () => {
 				}, 2000);
 			}).timeout(10000);
 		});
-		describe('remove()', () => {
-	    it('should remove the existing node', done => {
-				assert.isDefined(testNode.peripheral); // defined by register()
-				bleio.remove(testNode, RED);
-				function waitUntilDone() {
-					if (!testNode.peripheral) {
-						done();
-					}
-					setTimeout(waitUntilDone, 1000);
-				}
-				waitUntilDone();
-			}).timeout(10000);
-		});
 	});
+});
+
+describe('registration and removal without stub', () => {
+  let testPeripheral = {
+    on: () => {},
+    discoverAllServicesAndCharacteristics: () => {},
+    disconnect: () => {},
+    connect: () => {},
+    address: 'CC:5E:66:DD:0B:88',
+    test: true
+  };
+  let testNode = {
+    bleioNode: {
+      localName: 'BLEIo_0',
+      address: 'CC:5E:66:DD:0B:88'
+    },
+    id: '1111'
+  };
+  let testPeripheral2 = {
+    on: () => {},
+    discoverAllServicesAndCharacteristics: () => {},
+    disconnect: () => {},
+    connect: () => {},
+    address: 'FF:5E:66:DD:0B:FF',
+    test: true
+  };
+  let testNode2 = {
+    bleioNode: {
+      localName: 'BLEIo_F',
+      address: ''
+    },
+    id: '2222'
+  };
+  describe('register()', () => {
+    it('should register a new node', done => {
+      delete testNode.peripheral;
+      bleio.register(testNode, RED);
+      function waitUntilDone() {
+        if (testNode.peripheral) {
+          return done();
+        }
+        setTimeout(waitUntilDone, 1000);
+      }
+      setTimeout(() => {
+        bleio.discoverFunc('BLEIo_0', testPeripheral, RED);
+        waitUntilDone();
+      }, 2000);
+    }).timeout(10000);
+    it('should register a new node with wildcard', done => {
+      delete testNode2.peripheral;
+      bleio.register(testNode2, RED);
+      function waitUntilDone() {
+        if (testNode2.peripheral) {
+          return done();
+        }
+        setTimeout(waitUntilDone, 1000);
+      }
+      setTimeout(() => {
+        bleio.discoverFunc('BLEIo_F', testPeripheral2, RED);
+        waitUntilDone();
+      }, 2000);
+    }).timeout(10000);
+  });
+  describe('remove()', () => {
+    it('should remove the existing node', done => {
+      assert.isDefined(testNode.peripheral); // defined by register()
+      assert.isTrue(bleio.remove(testNode, RED));
+      function waitUntilDone() {
+        if (!testNode.peripheral) {
+          done();
+        }
+        setTimeout(waitUntilDone, 1000);
+      }
+      waitUntilDone();
+    }).timeout(10000);
+  });
 });
