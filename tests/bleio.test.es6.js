@@ -115,7 +115,7 @@ describe('bleio module', () => {
 	    sandbox = sinon.sandbox.create();
 			testPeripheral = sandbox.stub({
 				on: () => {},
-				discoverAllServicesAndCharacteristics: () => {},
+				discoverSomeServicesAndCharacteristics: () => {},
 				disconnect: () => {},
 				connect: () => {},
         terminate: () => {},
@@ -133,7 +133,7 @@ describe('bleio module', () => {
   		});
 			testPeripheral2 = sandbox.stub({
 				on: () => {},
-				discoverAllServicesAndCharacteristics: () => {},
+				discoverSomeServicesAndCharacteristics: () => {},
 				disconnect: () => {},
 				connect: () => {},
         terminate: () => {},
@@ -160,7 +160,7 @@ describe('bleio module', () => {
 		describe('register()', () => {
 	    it('should register a new node', done => {
 				testPeripheral.on.onFirstCall().yields(null);
-				testPeripheral.discoverAllServicesAndCharacteristics.yields(
+				testPeripheral.discoverSomeServicesAndCharacteristics.yields(
           null, null, characteristics);
         characteristics.forEach((c) => {
           // on('data') => node.send()
@@ -205,7 +205,7 @@ describe('bleio module', () => {
 describe('registration and removal without stub', () => {
   let testPeripheral = {
     on: () => {},
-    discoverAllServicesAndCharacteristics: () => {},
+    discoverSomeServicesAndCharacteristics: () => {},
     disconnect: () => {},
     connect: () => {},
     address: 'CC:5E:66:DD:0B:88',
@@ -220,7 +220,7 @@ describe('registration and removal without stub', () => {
   };
   let testPeripheral2 = {
     on: () => {},
-    discoverAllServicesAndCharacteristics: () => {},
+    discoverSomeServicesAndCharacteristics: () => {},
     disconnect: () => {},
     connect: () => {},
     address: 'FF:5E:66:DD:0B:FF',

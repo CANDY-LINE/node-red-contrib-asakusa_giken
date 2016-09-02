@@ -95,7 +95,7 @@ function setupPeripheral(peripheral, RED) {
       RED.log.error(`[BLEIo:connect] err=${err}`);
       return;
     }
-    peripheral.discoverAllServicesAndCharacteristics(SERVICE_UUID,
+    peripheral.discoverSomeServicesAndCharacteristics(SERVICE_UUID,
       [
         CHR_INTERVAL_UUID,
         CHR_DOUT_UUID,
