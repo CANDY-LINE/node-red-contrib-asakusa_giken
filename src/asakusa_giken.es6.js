@@ -23,7 +23,7 @@ export default function(RED) {
         this.uuid = n.uuid; // can be empty
       }
     }
-    RED.nodes.registerType('', 'BLEIo', BLEIoNode);
+    RED.nodes.registerType('BLEIo', BLEIoNode);
 
     class BLEIoInNode {
       constructor(n) {
@@ -46,7 +46,7 @@ export default function(RED) {
         bleio.clear(RED);
       }
     }
-    RED.nodes.registerType('', 'BLEIo in', BLEIoInNode);
+    RED.nodes.registerType('BLEIo in', BLEIoInNode);
 
     class BLEIoOutNode {
       constructor(n) {
@@ -69,7 +69,7 @@ export default function(RED) {
         bleio.clear(RED);
       }
     }
-    RED.nodes.registerType('', 'BLEIo out', BLEIoOutNode);
+    RED.nodes.registerType('BLEIo out', BLEIoOutNode);
 
     // BLECAST
     ble.registerDiscoverHandler(blecast.acceptFunc, blecast.discoverFunc);
@@ -80,7 +80,7 @@ export default function(RED) {
         this.uuid = n.uuid;
       }
     }
-    RED.nodes.registerType('', 'BLECAST_BL', BlecastBlNode);
+    RED.nodes.registerType('BLECAST_BL', BlecastBlNode);
 
     class BlecastBlInNode {
       constructor(n) {
@@ -102,7 +102,7 @@ export default function(RED) {
         blecast.clear(RED);
       }
     }
-    RED.nodes.registerType('', 'BLECAST_BL in', BlecastBlInNode);
+    RED.nodes.registerType('BLECAST_BL in', BlecastBlInNode);
 
     class BlecastTmNode {
       constructor(n) {
@@ -111,7 +111,7 @@ export default function(RED) {
         this.uuid = n.uuid;
       }
     }
-    RED.nodes.registerType('', 'BLECAST_TM', BlecastTmNode);
+    RED.nodes.registerType('BLECAST_TM', BlecastTmNode);
 
     class BlecastTmInNode {
       constructor(n) {
