@@ -124,7 +124,7 @@ describe('bleio module', () => {
       });
       testNode = sandbox.stub({
         send: () => {},
-        in: false,
+        in: true,
         bleioNode: {
           localName: 'BLEIo_0',
           address: 'CC:5E:66:DD:0B:88'
@@ -142,7 +142,7 @@ describe('bleio module', () => {
       });
       testNode2 = sandbox.stub({
         send: () => {},
-        in: false,
+        in: true,
         bleioNode: {
           localName: 'BLEIo_F',
           address: ''

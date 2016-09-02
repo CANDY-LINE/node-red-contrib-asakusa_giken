@@ -121,7 +121,7 @@ function setupPeripheral(peripheral, RED) {
             c.on('data', (data, isNotification) => {
               if (isNotification && peripheral.nodes) {
                 peripheral.nodes.forEach((node) => {
-                  if (!node.in) {
+                  if (node.in) {
                     node.send({
                       payload: {
                         type: UUID_TO_TYPE[uuid],
@@ -139,7 +139,7 @@ function setupPeripheral(peripheral, RED) {
         // out nodes
         if (peripheral.nodes) {
           peripheral.nodes.forEach((node) => {
-            if (node.in) {
+            if (!node.in) {
               node.on('input', (msg) => {
                 let values = msg.payload;
                 if (!values) {
