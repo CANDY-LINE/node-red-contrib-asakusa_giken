@@ -3,11 +3,14 @@
     "label" : {
       "blecastBl" : "BLE Illuminance Sensor",
       "blecastTm" : "BLE Temperature Sensor",
+      "bleio": "BLEIo Module",
       "useString" : "Use string payload",
+      "localName" : "Local Name",
       "address" : "Address",
       "uuid" : "UUID"
     },
     "placeholder" : {
+      "optionalAddress" : "(optional) e.g. 99:ff:00:99:ff:ff",
       "address" : "e.g. 99:ff:00:99:ff:ff",
       "uuid" : "(optional)"
     },
