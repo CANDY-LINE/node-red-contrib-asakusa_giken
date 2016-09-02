@@ -159,13 +159,16 @@ describe('bleio module', () => {
 
 		describe('register()', () => {
 	    it('should register a new node', done => {
-				testPeripheral.on.onFirstCall().yields(null);
-				testPeripheral.discoverSomeServicesAndCharacteristics.yields(
+        // connect
+        testPeripheral.on.onFirstCall().yields(null);testPeripheral.discoverSomeServicesAndCharacteristics.yields(
           null, null, characteristics);
         characteristics.forEach((c) => {
           // on('data') => node.send()
           c.on.yields(new Buffer('12', 'hex'), true);
         });
+
+        // disconnect
+				testPeripheral.on.onSecondCall().yields(null);
 
 				delete testNode.peripheral;
 				bleio.register(testNode, RED);

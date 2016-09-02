@@ -171,7 +171,8 @@ function setupPeripheral(peripheral, RED) {
       RED.log.info(`[BLEIo:disconnect] err=${err}`);
       return;
     }
-    Object.values(bleioPeripherals).forEach(ary => {
+    Object.keys(bleioPeripherals).forEach((key) => {
+      let ary = bleioPeripherals[key];
       let i = ary.indexOf(peripheral);
       if (i >= 0) {
         ary.splice(i, 1);
