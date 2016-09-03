@@ -83,6 +83,9 @@ function valToBuffer(hexOrIntArray) {
   if (Buffer.isBuffer(hexOrIntArray)) {
     return hexOrIntArray;
   }
+  if (typeof hexOrIntArray === 'number') {
+    return new Buffer(parseInt(hexOrIntArray).toString(16), 'hex');
+  }
   if (typeof hexOrIntArray === 'string') {
     return new Buffer(hexOrIntArray, 'hex');
   }
