@@ -96,7 +96,7 @@ function valToBuffer(hexOrIntArray) {
 }
 
 function setupPeripheral(peripheral, RED) {
-  peripheral.on('connect', (err) => {
+  let connectHandler = (err) => {
     if (err) {
       RED.log.error(`[BLEIo:connect] err=${err}`);
       return;
@@ -118,9 +118,26 @@ function setupPeripheral(peripheral, RED) {
           peripheral.disconnect();
           return;
         }
+        // write init params
+        if (peripheral.nodes && peripheral.nodes.length > 0) {
+          let config = peripheral.nodes[0].bleioNode;
+          let val = parseInt(config.initInterval);
+          if (val > 0) {
+            findChr(CHR_INTERVAL_UUID, characteristics).write(valToBuffer(val), true);
+          }
+          // TODO initLcd
+          val = parseInt(config.initDout) & 0xFF;
+          if (val) {
+            findChr(CHR_DOUT_UUID, characteristics).write(valToBuffer(val), true);
+          }
+          val = parseInt(config.initPwm) & 0xFFFFFF;
+          if (val) {
+            findChr(CHR_PWM_UUID, characteristics).write(valToBuffer(val), true);
+          }
+        }
+        // in nodes
         characteristics.forEach((c) => {
           let uuid = c.uuid.toLowerCase();
-          // in nodes
           if (!c.subscribed &&
               ((uuid === CHR_DIN_UUID) || (uuid === CHR_AIN_UUID))) {
             c.subscribe();
@@ -171,8 +188,8 @@ function setupPeripheral(peripheral, RED) {
         }
       }
     );
-  });
-  peripheral.on('disconnect', (err) => {
+  };
+  let disconnectHandler = (err) => {
     if (err) {
       RED.log.info(`[BLEIo:disconnect] err=${err}`);
       return;
@@ -187,10 +204,16 @@ function setupPeripheral(peripheral, RED) {
     if (!peripheral.terminated) {
       peripheral.connect();
     }
-  });
+  };
+  peripheral.on('connect', connectHandler);
+  peripheral.on('disconnect', disconnectHandler);
   peripheral.terminate = () => {
     peripheral.terminated = true;
-    peripheral.disconnect();
+    peripheral.removeListener('connect', connectHandler);
+    peripheral.removeListener('disconnect', disconnectHandler);
+    peripheral.disconnect((err) => {
+      disconnectHandler(err);
+    });
   };
   peripheral.connect();
 }
