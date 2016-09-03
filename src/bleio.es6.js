@@ -96,6 +96,9 @@ function valToBuffer(hexOrIntArray) {
 }
 
 function setupPeripheral(peripheral, RED) {
+  if (peripheral.instrumented) {
+    return;
+  }
   let connectHandler = (err) => {
     if (err) {
       RED.log.error(`[BLEIo:connect] err=${err}`);
@@ -215,7 +218,10 @@ function setupPeripheral(peripheral, RED) {
       disconnectHandler(err);
     });
   };
-  peripheral.connect();
+  peripheral.instrumented = true;
+  if (peripheral.state !== 'connected') {
+    peripheral.connect();
+  }
 }
 
 function startAssociationTask(RED) {
