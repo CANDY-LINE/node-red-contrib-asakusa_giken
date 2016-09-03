@@ -184,7 +184,10 @@
       uuid: { value: '', required: false },
       initInterval: { value: '500', required: true },
       initDout: { value: '0', required: true },
-      initLcd: { value: '', required: false },
+      initLcd: { value: '', required: false, validate: function(v) {
+
+        return LCD_CHARS(v);
+      }},
       initPwm: { value: '0', required: true },
     },
     label: function() {

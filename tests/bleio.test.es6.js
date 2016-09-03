@@ -10,6 +10,7 @@ const BLEIO_CHARS = [
   {
     subscribe: () => {},
     on: () => {},
+    notify: () => {},
     uuid:'feedaa02594246d5ade581c064d03a03',
     name:null,
     type:null,
@@ -22,6 +23,7 @@ const BLEIO_CHARS = [
   {
     subscribe: () => {},
     on: () => {},
+    notify: () => {},
     uuid:'feedaa03594246d5ade581c064d03a03',
     name:null,
     type:null,
@@ -34,6 +36,7 @@ const BLEIO_CHARS = [
   {
     subscribe: () => {},
     on: () => {},
+    notify: () => {},
     uuid:'feedaa04594246d5ade581c064d03a03',
     name:null,
     type:null,
@@ -46,6 +49,7 @@ const BLEIO_CHARS = [
   {
     subscribe: () => {},
     on: () => {},
+    notify: () => {},
     uuid:'feedaa05594246d5ade581c064d03a03',
     name:null,
     type:null,
@@ -58,6 +62,7 @@ const BLEIO_CHARS = [
   {
     subscribe: () => {},
     on: () => {},
+    notify: () => {},
     uuid:'feedaa06594246d5ade581c064d03a03',
     name:null,
     type:null,
@@ -70,6 +75,7 @@ const BLEIO_CHARS = [
   {
     subscribe: () => {},
     on: () => {},
+    notify: () => {},
     uuid:'feedaa07594246d5ade581c064d03a03',
     name:null,
     type:null,
@@ -166,6 +172,7 @@ describe('bleio module', () => {
         testPeripheral.discoverSomeServicesAndCharacteristics.yields(
           null, null, characteristics);
         characteristics.forEach((c) => {
+          c.subscribe.yields(null);
           // on('data') => node.send()
           c.on.yields(new Buffer('12', 'hex'), true);
         });
@@ -215,6 +222,7 @@ describe('registration and removal without stub', () => {
     discoverSomeServicesAndCharacteristics: () => {},
     disconnect: () => {},
     connect: () => {},
+    terminate: () => {},
     address: 'CC:5E:66:DD:0B:88',
     test: true
   };
@@ -230,6 +238,7 @@ describe('registration and removal without stub', () => {
     discoverSomeServicesAndCharacteristics: () => {},
     disconnect: () => {},
     connect: () => {},
+    terminate: () => {},
     address: 'FF:5E:66:DD:0B:FF',
     test: true
   };

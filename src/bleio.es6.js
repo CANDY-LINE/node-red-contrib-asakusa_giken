@@ -143,23 +143,31 @@ function setupPeripheral(peripheral, RED) {
           let uuid = c.uuid.toLowerCase();
           if (!c.subscribed &&
               ((uuid === CHR_DIN_UUID) || (uuid === CHR_AIN_UUID))) {
-            c.subscribe();
-            c.on('data', (data, isNotification) => {
-              if (isNotification && peripheral.nodes) {
-                peripheral.nodes.forEach((node) => {
-                  if (node.in) {
-                    node.send({
-                      payload: {
-                        type: UUID_TO_TYPE[uuid],
-                        val: data
-                      }
-                    });
-                  }
-                });
+            c.subscribe((err) => {
+              if (err) {
+                RED.log.error(err);
+                RED.log.error(RED._('asakusa_giken.errors.unexpected-peripheral'));
+                peripheral.disconnect();
+                return;
               }
+              c.on('data', (data, isNotification) => {
+                if (isNotification && peripheral.nodes) {
+                  peripheral.nodes.forEach((node) => {
+                    if (node.in) {
+                      node.send({
+                        payload: {
+                          type: UUID_TO_TYPE[uuid],
+                          val: data
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+              c.notify(true);
+              c.subscribed = true;
+              RED.log.info(`[BLEIo] Subscribed to ${UUID_TO_TYPE[uuid]}`);
             });
-            c.subscribed = true;
-            RED.log.info(`[BLEIo] Subscribed to ${UUID_TO_TYPE[uuid]}`);
           }
         });
         // out nodes
@@ -242,11 +250,11 @@ function startAssociationTask(RED) {
     }
     periphs.forEach(peripheral => {
       Object.keys(nodes).forEach(address => {
-        if (peripheral.nodes.indexOf(nodes[address]) < 0) {
-          Object.keys(nodes[address]).forEach(id => {
+        Object.keys(nodes[address]).forEach(id => {
+          if (peripheral.nodes.indexOf(nodes[address][id]) < 0) {
             unassociated.push(nodes[address][id]);
-          });
-        }
+          }
+        });
       });
     });
     periphs.filter(peripheral => {
@@ -291,11 +299,11 @@ export function register(node, RED) {
     RED.log.error(RED._('asakusa_giken.errors.missing-localName', {id: node.bleioNode.id}));
     return;
   }
-  let address = node.bleioNode.address || '*';
   if (!bleioNodes[localName]) {
     bleioNodes[localName] = {};
   }
   let periphNodes = bleioNodes[localName];
+  let address = node.bleioNode.address || '*';
   if (!periphNodes[address]) {
     periphNodes[address] = {};
   }
