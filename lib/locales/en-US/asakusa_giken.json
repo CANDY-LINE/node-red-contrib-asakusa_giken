@@ -8,7 +8,7 @@
       "localName" : "Local Name",
       "address" : "Address",
       "uuid" : "UUID",
-      "initInterval" : "Initial Interval (ms)",
+      "initInterval" : "Initial AIN Interval (ms)",
       "interval" : "INTERVAL",
       "initDout" : "Initial DOUT",
       "din" : "DIN",
