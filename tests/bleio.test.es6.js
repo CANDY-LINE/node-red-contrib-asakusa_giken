@@ -11,6 +11,8 @@ const BLEIO_CHARS = [
     subscribe: () => {},
     on: () => {},
     notify: () => {},
+    write: () => {},
+    read: () => {},
     uuid:'feedaa02594246d5ade581c064d03a03',
     name:null,
     type:null,
@@ -24,6 +26,8 @@ const BLEIO_CHARS = [
     subscribe: () => {},
     on: () => {},
     notify: () => {},
+    write: () => {},
+    read: () => {},
     uuid:'feedaa03594246d5ade581c064d03a03',
     name:null,
     type:null,
@@ -37,6 +41,8 @@ const BLEIO_CHARS = [
     subscribe: () => {},
     on: () => {},
     notify: () => {},
+    write: () => {},
+    read: () => {},
     uuid:'feedaa04594246d5ade581c064d03a03',
     name:null,
     type:null,
@@ -50,6 +56,8 @@ const BLEIO_CHARS = [
     subscribe: () => {},
     on: () => {},
     notify: () => {},
+    write: () => {},
+    read: () => {},
     uuid:'feedaa05594246d5ade581c064d03a03',
     name:null,
     type:null,
@@ -63,6 +71,8 @@ const BLEIO_CHARS = [
     subscribe: () => {},
     on: () => {},
     notify: () => {},
+    write: () => {},
+    read: () => {},
     uuid:'feedaa06594246d5ade581c064d03a03',
     name:null,
     type:null,
@@ -76,6 +86,8 @@ const BLEIO_CHARS = [
     subscribe: () => {},
     on: () => {},
     notify: () => {},
+    write: () => {},
+    read: () => {},
     uuid:'feedaa07594246d5ade581c064d03a03',
     name:null,
     type:null,
@@ -131,6 +143,7 @@ describe('bleio module', () => {
       });
       testNode = sandbox.stub({
         send: () => {},
+        on: () => {},
         emit: () => {},
         in: true,
         bleioNode: {
@@ -151,6 +164,7 @@ describe('bleio module', () => {
       });
       testNode2 = sandbox.stub({
         send: () => {},
+        on: () => {},
         emit: () => {},
         in: true,
         bleioNode: {
@@ -178,6 +192,12 @@ describe('bleio module', () => {
           // on('data') => node.send()
           c.on.yields(new Buffer('12', 'hex'), true);
         });
+        // node.on()
+        testNode.on.yields({
+          payload: {
+            type: 'DIN'
+          }
+        });
 
         // disconnect
         testPeripheral.on.onSecondCall().yields(null);
@@ -188,6 +208,9 @@ describe('bleio module', () => {
           if (testNode.peripheral) {
             assert.equal(2, characteristics.filter((c) => {
               return c.subscribed;
+            }).length);
+            assert.equal(1, characteristics.filter((c) => {
+              return c.read.called;
             }).length);
             assert.isTrue(testNode.send.called);
             return done();
@@ -229,6 +252,7 @@ describe('registration and removal without stub', () => {
     test: true
   };
   let testNode = {
+    on: () => {},
     emit: () => {},
     bleioNode: {
       localName: 'BLEIo_0',
@@ -246,6 +270,7 @@ describe('registration and removal without stub', () => {
     test: true
   };
   let testNode2 = {
+    on: () => {},
     emit: () => {},
     bleioNode: {
       localName: 'BLEIo_F',
