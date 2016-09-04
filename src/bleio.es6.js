@@ -556,13 +556,13 @@ export function remove(node, RED) {
       periphHoldingNodes.splice(i, 1);
     }
     delete periphNodes[address][node.id].peripheral;
+    delete periphNodes[address][node.id];
     if (Object.keys(periphNodes[address]).length === 0) {
       peripheral.terminate();
     } else {
       peripheral.disconnect() // will re-connect
     }
   }
-  delete periphNodes[address][node.id];
   return true;
 }
 
