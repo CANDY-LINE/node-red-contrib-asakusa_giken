@@ -364,6 +364,7 @@ function setupPeripheral(peripheral, RED) {
                 }
                 let uuid = TYPE_TO_UUID[v.type];
                 if (!uuid) {
+                  RED.log.error(RED._('asakusa_giken.errors.unexpected-type', {type:v.type}));
                   return;
                 }
                 if (node.in) {

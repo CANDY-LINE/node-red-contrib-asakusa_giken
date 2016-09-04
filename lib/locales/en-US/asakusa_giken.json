@@ -45,6 +45,7 @@
       "setup-done": "[BLE] Set up done"
     },
     "errors" : {
+      "unexpected-type": "[BLEIo] Unexpected type:[__type__]",
       "unexpected-peripheral": "[BLE] Unexpected peripheral, disconnecting",
       "missing-localName": "[BLE] Missing localName for the node [__id__]",
       "unknown-peripheral": "[BLE] Unknown peripheral: category=[__categoryName__], peripheral.address=[__peripheralAddress__], peripheral.uuid=[__peripheralUuid__]",
