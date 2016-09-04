@@ -432,6 +432,7 @@ function setupPeripheral(peripheral, RED) {
     }
   };
   peripheral.instrumented = true;
+  peripheral.terminated = false;
   if (peripheral.state !== 'connected') {
     peripheral.connect();
   }
