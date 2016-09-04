@@ -236,7 +236,7 @@ function valToBuffer(hexOrIntArray) {
 
 function strToBuffer(str) {
   if (!str) {
-    return new Buffer();
+    return new Buffer(16);
   }
   let i;
   let buf = [];
@@ -245,6 +245,9 @@ function strToBuffer(str) {
     if (c) {
       buf.push(c);
     }
+  }
+  for (i = buf.length; i < 16; i++) {
+    buf.push(0);
   }
   return new Buffer(buf);
 }
