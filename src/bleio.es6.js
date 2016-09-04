@@ -97,6 +97,9 @@ function valToBuffer(hexOrIntArray) {
 
 function setupPeripheral(peripheral, RED) {
   if (peripheral.instrumented) {
+    if (peripheral.state !== 'connected') {
+      peripheral.connect();
+    }
     return;
   }
   let connectHandler = (err) => {
@@ -147,11 +150,13 @@ function setupPeripheral(peripheral, RED) {
               if (err) {
                 RED.log.error(err);
                 RED.log.error(RED._('asakusa_giken.errors.unexpected-peripheral'));
-                peripheral.disconnect();
+                if (peripheral) {
+                  peripheral.disconnect();
+                }
                 return;
               }
               c.on('data', (data, isNotification) => {
-                if (isNotification && peripheral.nodes) {
+                if (isNotification && peripheral && peripheral.nodes) {
                   peripheral.nodes.forEach((node) => {
                     if (node.in) {
                       node.send({
