@@ -266,6 +266,11 @@ function startAssociationTask(RED) {
     if (!periphs || periphs.length === 0) {
       if (nodes && Object.keys(nodes).length > 0) {
         retry = true;
+        Object.keys(nodes).forEach((address) => {
+          Object.keys(nodes[address]).forEach((nodeId) => {
+            nodes[address][nodeId].emit('closed');
+          });
+        });
       }
       return;
     }
@@ -292,7 +297,7 @@ function startAssociationTask(RED) {
           unassociated[i].peripheral = peripheral;
           if (peripheral.state === 'connected') {
             unassociated[i].emit('opened');
-          } else if (peripheral.state === 'disconnected') {
+          } else {
             unassociated[i].emit('closed');
           }
           // mark the node associated
