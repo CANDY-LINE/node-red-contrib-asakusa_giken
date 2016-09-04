@@ -227,13 +227,12 @@ function setupPeripheral(peripheral, RED) {
         ary.splice(i, 1);
       }
     });
-    if (peripheral.terminated) {
-      if (peripheral && peripheral.nodes) {
-        peripheral.nodes.forEach((node) => {
-          node.emit('closed');
-        });
-      }
-    } else {
+    if (peripheral && peripheral.nodes) {
+      peripheral.nodes.forEach((node) => {
+        node.emit('closed');
+      });
+    }
+    if (!peripheral.terminated) {
       peripheral.connect();
     }
   };
