@@ -34,6 +34,11 @@
       "initLcd" : "up to 16-character text",
       "initPwm" : "0 to 100"
     },
+    "status": {
+      "error": "error",
+      "connected": "connected",
+      "disconnected": "disconnected"
+    },
     "message": {
       "start-scanning": "[BLE] Start Scanning...",
       "stop-scanning": "[BLE] Stop Scanning.",

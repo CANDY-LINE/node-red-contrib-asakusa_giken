@@ -131,6 +131,7 @@ describe('bleio module', () => {
       });
       testNode = sandbox.stub({
         send: () => {},
+        emit: () => {},
         in: true,
         bleioNode: {
           localName: 'BLEIo_0',
@@ -150,6 +151,7 @@ describe('bleio module', () => {
       });
       testNode2 = sandbox.stub({
         send: () => {},
+        emit: () => {},
         in: true,
         bleioNode: {
           localName: 'BLEIo_F',
@@ -227,6 +229,7 @@ describe('registration and removal without stub', () => {
     test: true
   };
   let testNode = {
+    emit: () => {},
     bleioNode: {
       localName: 'BLEIo_0',
       address: 'CC:5E:66:DD:0B:88'
@@ -243,6 +246,7 @@ describe('registration and removal without stub', () => {
     test: true
   };
   let testNode2 = {
+    emit: () => {},
     bleioNode: {
       localName: 'BLEIo_F',
       address: ''

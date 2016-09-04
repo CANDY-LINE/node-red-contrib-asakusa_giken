@@ -35,6 +35,9 @@ export default function(RED) {
         this.bleioNode = RED.nodes.getNode(this.bleioNodeId);
         if (this.bleioNode) {
           bleio.register(this, RED);
+          this.on('opened', () => { this.status({fill:'green',shape:'dot',text:'asakusa_giken.status.connected'}); });
+          this.on('erro',  () => { this.status({fill:'red',shape:'ring',text:'asakusa_giken.status.error'}); });
+          this.on('closed',  () => { this.status({fill:'red',shape:'ring',text:'asakusa_giken.status.disconnected'}); });
         }
         this.name = n.name;
 
@@ -58,6 +61,9 @@ export default function(RED) {
         this.bleioNode = RED.nodes.getNode(this.bleioNodeId);
         if (this.bleioNode) {
           bleio.register(this, RED);
+          this.on('opened', () => { this.status({fill:'green',shape:'dot',text:'asakusa_giken.status.connected'}); });
+          this.on('erro',  () => { this.status({fill:'red',shape:'ring',text:'asakusa_giken.status.error'}); });
+          this.on('closed',  () => { this.status({fill:'red',shape:'ring',text:'asakusa_giken.status.disconnected'}); });
         }
         this.name = n.name;
 

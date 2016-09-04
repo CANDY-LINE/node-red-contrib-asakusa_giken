@@ -107,6 +107,11 @@ function setupPeripheral(peripheral, RED) {
       RED.log.error(`[BLEIo:connect] err=${err}`);
       return;
     }
+    if (peripheral && peripheral.nodes) {
+      peripheral.nodes.forEach((node) => {
+        node.emit('opened');
+      });
+    }
     peripheral.discoverSomeServicesAndCharacteristics(
       [
         SERVICE_UUID
@@ -208,16 +213,27 @@ function setupPeripheral(peripheral, RED) {
   let disconnectHandler = (err) => {
     if (err) {
       RED.log.info(`[BLEIo:disconnect] err=${err}`);
+      if (peripheral && peripheral.nodes) {
+        peripheral.nodes.forEach((node) => {
+          node.emit('erro');
+        });
+      }
       return;
     }
-    Object.keys(bleioPeripherals).forEach((key) => {
-      let ary = bleioPeripherals[key];
+    Object.keys(bleioPeripherals).forEach((localName) => {
+      let ary = bleioPeripherals[localName];
       let i = ary.indexOf(peripheral);
       if (i >= 0) {
         ary.splice(i, 1);
       }
     });
-    if (!peripheral.terminated) {
+    if (peripheral.terminated) {
+      if (peripheral && peripheral.nodes) {
+        peripheral.nodes.forEach((node) => {
+          node.emit('closed');
+        });
+      }
+    } else {
       peripheral.connect();
     }
   };
@@ -228,7 +244,7 @@ function setupPeripheral(peripheral, RED) {
     peripheral.terminated = true;
     peripheral.removeListener('connect', connectHandler);
     peripheral.removeListener('disconnect', disconnectHandler);
-    if (peripheral.state !== '　disconnected') {
+    if (peripheral.state !== 'disconnected') {
       peripheral.disconnect((err) => {
         disconnectHandler(err);
       });
@@ -259,7 +275,7 @@ function startAssociationTask(RED) {
     periphs.forEach(peripheral => {
       Object.keys(nodes).forEach(address => {
         Object.keys(nodes[address]).forEach(id => {
-          if (peripheral.nodes.indexOf(nodes[address][id]) < 0) {
+          if (peripheral.nodes && peripheral.nodes.indexOf(nodes[address][id]) < 0) {
             unassociated.push(nodes[address][id]);
           }
         });
@@ -274,6 +290,11 @@ function startAssociationTask(RED) {
           // mutual references
           peripheral.nodes.push(unassociated[i]);
           unassociated[i].peripheral = peripheral;
+          if (peripheral.state === 'connected') {
+            unassociated[i].emit('opened');
+          } else if (peripheral.state === 'disconnected') {
+            unassociated[i].emit('closed');
+          }
           // mark the node associated
           associated.push(unassociated[i]);
           return true;
@@ -338,16 +359,19 @@ export function remove(node, RED) {
     return false;
   }
   let peripheral = periphNodes[address][node.id].peripheral;
-  let periphHoldingNodes = peripheral.nodes;
-  let i = periphHoldingNodes.indexOf(node);
-  if (i >= 0) {
-    periphHoldingNodes.splice(i, 1);
+  if (peripheral) {
+    let periphHoldingNodes = peripheral.nodes;
+    let i = periphHoldingNodes.indexOf(node);
+    if (i >= 0) {
+      periphHoldingNodes.splice(i, 1);
+    }
+    delete periphNodes[address][node.id].peripheral;
+    if (Object.keys(periphNodes[address]).length === 0) {
+      peripheral.terminate();
+    }
   }
-  delete periphNodes[address][node.id].peripheral;
   delete periphNodes[address][node.id];
-  if (Object.keys(periphNodes[address]).length === 0) {
-    peripheral.terminate();
-  }
+  node.emit('closed');
   return true;
 }
 
