@@ -205,9 +205,16 @@ function valToBuffer(hexOrIntArray) {
     return hexOrIntArray;
   }
   if (typeof hexOrIntArray === 'number') {
-    return new Buffer(parseInt(hexOrIntArray).toString(16), 'hex');
+    let rawHex = parseInt(hexOrIntArray).toString(16);
+    if (rawHex.length % 2 === 1) {
+      rawHex += '0';
+    }
+    return new Buffer(rawHex, 'hex');
   }
   if (typeof hexOrIntArray === 'string') {
+    if (hexOrIntArray.length % 2 === 1) {
+      hexOrIntArray += '0';
+    }
     return new Buffer(hexOrIntArray, 'hex');
   }
   if (Array.isArray(hexOrIntArray)) {
