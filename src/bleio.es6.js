@@ -1,6 +1,7 @@
 'use strict';
 
 import Promise from 'es6-promises';
+import LRU from 'lru-cache';
 
 const TAG = '[BLEIo]'
 const SERVICE_UUID = 'feed0001594246d5ade581c064d03a03';
@@ -170,6 +171,11 @@ const bleioNodes = {};
  */
 const bleioPeripherals = {};
 
+let unknown = LRU({
+  max: 100,
+  maxAge: 1000 * 60 * 60
+});
+
 let associationTask = null;
 
 export function acceptFunc(localName) {
@@ -187,7 +193,12 @@ export function discoverFunc(localName, peripheral, RED) {
       peripheral.nodes = [];
     }
     periphs.push(peripheral);
-    RED.log.warn(`local name[${localName}] has been detected (address:${peripheral.address})`);
+    let key = localName + ':' + (peripheral.address ? '*' : peripheral.address);
+    if (!unknown.get(key)) {
+      unknown.set(key, 1);
+      RED.log.warn(RED._('asakusa_giken.errors.unknown-peripheral',
+        { categoryName: localName, peripheralAddress: peripheral.address, peripheralUuid: peripheral.uuid }));
+    }
   }
 }
 
@@ -549,6 +560,7 @@ export function remove(node, RED) {
   return true;
 }
 
-export function clear() {
-  // do nothing
+export function clear(RED) {
+  unknown.reset();
+  RED.log.info(`${TAG} Unknown cache cleared`);
 }
