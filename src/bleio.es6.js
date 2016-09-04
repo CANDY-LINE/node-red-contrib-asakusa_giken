@@ -252,6 +252,16 @@ function strToBuffer(str) {
   return new Buffer(buf);
 }
 
+function truncatePwm(v) {
+  v = (parseInt(v) || 0);
+  if (v < 0) {
+    return 0;
+  } else if (v > 100) {
+    return 100;
+  }
+  return v;
+}
+
 function writeDataFunc(characteristics) {
   return (uuid, val) => {
     if (uuid === CHR_LCD_UUID) {
@@ -264,12 +274,29 @@ function writeDataFunc(characteristics) {
         findChr(CHR_INTERVAL_UUID, characteristics).write(valToBuffer(val), true);
       }
     } else if (uuid === CHR_DOUT_UUID) {
-      val = parseInt(val) & 0xFF;
+      if (val && typeof val === 'object') {
+        let dout = 0;
+        for (let i = 8; i >= 1; i--) {
+          dout += val['dout' + i] ? 1 : 0;
+          dout <<= 1;
+        }
+        dout >>= 1;
+        val = dout;
+      } else {
+        val = parseInt(val) & 0xFF;
+      }
       if (val > 0) {
         findChr(CHR_DOUT_UUID, characteristics).write(valToBuffer(val), true);
       }
     } else if (uuid === CHR_PWM_UUID) {
-      val = parseInt(val) & 0xFFFFFF;
+      if (val && typeof val === 'object') {
+        val =
+          truncatePwm(val.pwm1) * 0x10000 +
+          truncatePwm(val.pwm2) * 0x00100 +
+          truncatePwm(val.pwm3);
+      } else {
+        val = parseInt(val) & 0xFFFFFF;
+      }
       if (val > 0) {
         findChr(CHR_PWM_UUID, characteristics).write(valToBuffer(val), true);
       }

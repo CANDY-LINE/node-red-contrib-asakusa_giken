@@ -22,9 +22,9 @@
       "dout7" : "DOUT7",
       "dout8" : "DOUT8",
       "initLcd" : "Initial LCD",
-      "initPwm1" : "Initial PWM1",
-      "initPwm2" : "Initial PWM2",
-      "initPwm3" : "Initial PWM3"
+      "pwm1" : "Initial PWM1",
+      "pwm2" : "Initial PWM2",
+      "pwm3" : "Initial PWM3"
     },
     "placeholder" : {
       "optionalAddress" : "(optional) e.g. 99:ff:00:99:ff:ff",

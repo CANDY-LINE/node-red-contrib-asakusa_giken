@@ -22,9 +22,16 @@ export default function(RED) {
         this.address = n.address; // can be empty
         this.uuid = n.uuid; // can be empty
         this.initInterval = n.initInterval;
-        this.initDout = n.initDout;
+        this.initDout = {};
+        for (let i = 1; i <= 8; i++) {
+          this.initDout[`dout${i}`] = n[`initDout${i}`];
+        }
         this.initLcd = n.initLcd;
-        this.initPwm = n.initPwm;
+        this.initPwm = {
+          pwm1: n.initPwm1,
+          pwm2: n.initPwm2,
+          pwm3: n.initPwm3
+        };
       }
     }
     RED.nodes.registerType('BLEIo', BLEIoNode);
