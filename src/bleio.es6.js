@@ -371,12 +371,17 @@ function setupPeripheral(peripheral, RED) {
               }
               c.on('data', (data) => {
                 if (peripheral && peripheral.nodes) {
+                  let now = new Date().getTime();
                   peripheral.nodes.forEach((node) => {
                     if (node.in) {
                       node.send({
                         payload: {
                           type: UUID_TO_TYPE[uuid],
-                          val: UUID_VAL_PARSER[uuid](data)
+                          val: UUID_VAL_PARSER[uuid](data),
+                          tstamp: now,
+                          rssi: peripheral.rssi,
+                          address: peripheral.address,
+                          uuid: peripheral.uuid
                         }
                       });
                     }
