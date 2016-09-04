@@ -21,6 +21,10 @@ export default function(RED) {
         this.localName = n.localName;
         this.address = n.address; // can be empty
         this.uuid = n.uuid; // can be empty
+        this.initInterval = n.initInterval;
+        this.initDout = n.initDout;
+        this.initLcd = n.initLcd;
+        this.initPwm = n.initPwm;
       }
     }
     RED.nodes.registerType('BLEIo', BLEIoNode);
