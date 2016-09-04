@@ -206,7 +206,7 @@ describe('bleio module', () => {
         bleio.register(testNode, RED);
         function waitUntilDone() {
           if (testNode.peripheral) {
-            assert.equal(2, characteristics.filter((c) => {
+            assert.equal(6, characteristics.filter((c) => {
               return c.subscribed;
             }).length);
             assert.equal(1, characteristics.filter((c) => {

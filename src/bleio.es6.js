@@ -284,6 +284,8 @@ function setupPeripheral(peripheral, RED) {
   if (peripheral.instrumented) {
     if (peripheral.state !== 'connected') {
       peripheral.connect();
+    } else {
+      peripheral.disconnect(); // will re-connect
     }
     return;
   }
@@ -327,8 +329,7 @@ function setupPeripheral(peripheral, RED) {
         // in nodes
         characteristics.forEach((c) => {
           let uuid = c.uuid.toLowerCase();
-          if (!c.subscribed &&
-              ((uuid === CHR_DIN_UUID) || (uuid === CHR_AIN_UUID))) {
+          if (!c.subscribed) {
             c.subscribe((err) => {
               if (err) {
                 RED.log.error(err);
@@ -352,13 +353,14 @@ function setupPeripheral(peripheral, RED) {
                   });
                 }
               });
-              c.notify(true);
+              if ((uuid === CHR_DIN_UUID) || (uuid === CHR_AIN_UUID)) {
+                c.notify(true);
+              }
               c.subscribed = true;
               RED.log.info(`[BLEIo] Subscribed to ${UUID_TO_TYPE[uuid]}`);
             });
           }
         });
-        // out nodes
         if (peripheral.nodes) {
           peripheral.nodes.forEach((node) => {
             node.on('input', (msg) => {
