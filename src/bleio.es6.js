@@ -224,12 +224,15 @@ function setupPeripheral(peripheral, RED) {
   peripheral.on('connect', connectHandler);
   peripheral.on('disconnect', disconnectHandler);
   peripheral.terminate = () => {
+    peripheral.instrumented = false;
     peripheral.terminated = true;
     peripheral.removeListener('connect', connectHandler);
     peripheral.removeListener('disconnect', disconnectHandler);
-    peripheral.disconnect((err) => {
-      disconnectHandler(err);
-    });
+    if (peripheral.state !== '　disconnected') {
+      peripheral.disconnect((err) => {
+        disconnectHandler(err);
+      });
+    }
   };
   peripheral.instrumented = true;
   if (peripheral.state !== 'connected') {
