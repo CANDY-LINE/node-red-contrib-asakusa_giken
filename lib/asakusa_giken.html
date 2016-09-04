@@ -297,8 +297,10 @@
     },
     oneditsave: function() {
       var i;
-      if (!this.initInterval || this.initInterval < 1) {
-        this.initInterval = 1;
+      if (!this.initInterval) {
+        this.initInterval = 500;
+      } else if (this.initInterval < 0) {
+        this.initInterval = 0; // TURN AIN NOTIFICATION OFF
       } else if (this.initInterval > 60000) {
         this.initInterval = 60000;
       }
