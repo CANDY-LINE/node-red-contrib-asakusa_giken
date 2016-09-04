@@ -533,10 +533,11 @@ export function remove(node, RED) {
     delete periphNodes[address][node.id].peripheral;
     if (Object.keys(periphNodes[address]).length === 0) {
       peripheral.terminate();
+    } else {
+      peripheral.disconnect() // will re-connect
     }
   }
   delete periphNodes[address][node.id];
-  node.emit('closed');
   return true;
 }
 
