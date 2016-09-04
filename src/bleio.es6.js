@@ -66,7 +66,7 @@ export function discoverFunc(localName, peripheral, RED) {
       peripheral.nodes = [];
     }
     periphs.push(peripheral);
-    RED.log.info(`local name[${localName}] has been detected => ${peripheral}`);
+    RED.log.warn(`local name[${localName}] has been detected (address:${peripheral.address})`);
   }
 }
 
