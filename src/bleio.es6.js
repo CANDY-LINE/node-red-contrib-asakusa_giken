@@ -3,6 +3,7 @@
 import Promise from 'es6-promises';
 import LRU from 'lru-cache';
 
+const CONN_DEBUG = false;
 const TAG = '[BLEIo]'
 const SERVICE_UUID = 'feed0001594246d5ade581c064d03a03';
 
@@ -327,8 +328,10 @@ function readDataFunc(characteristics) {
 function setupPeripheral(peripheral, RED) {
   if (peripheral.instrumented) {
     if (peripheral.state !== 'connected') {
+      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (setupPeripheral:instrumented) connect()'); }
       peripheral.connect();
     } else {
+      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (setupPeripheral:instrumented) disconnect()'); }
       peripheral.disconnect(); // will re-connect
     }
     return;
@@ -338,6 +341,7 @@ function setupPeripheral(peripheral, RED) {
       RED.log.error(`[BLEIo:connect] err=${err}`);
       return;
     }
+    if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (connectHandler) connected!'); }
     if (peripheral && peripheral.nodes) {
       peripheral.nodes.forEach((node) => {
         node.emit('opened');
@@ -454,6 +458,7 @@ function setupPeripheral(peripheral, RED) {
       }
       return;
     }
+    if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (disconnectHandler) disconnected!'); }
     Object.keys(bleioPeripherals).forEach((localName) => {
       let ary = bleioPeripherals[localName];
       let i = ary.indexOf(peripheral);
@@ -467,6 +472,7 @@ function setupPeripheral(peripheral, RED) {
       });
     }
     if (!peripheral.terminated) {
+      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (disconnectHandler) re-connect()'); }
       peripheral.connect();
     }
   };
@@ -478,6 +484,7 @@ function setupPeripheral(peripheral, RED) {
     peripheral.removeListener('connect', connectHandler);
     peripheral.removeListener('disconnect', disconnectHandler);
     if (peripheral.state !== 'disconnected') {
+      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (terminate) disconnect()'); }
       peripheral.disconnect((err) => {
         disconnectHandler(err);
       });
@@ -486,6 +493,7 @@ function setupPeripheral(peripheral, RED) {
   peripheral.instrumented = true;
   peripheral.terminated = false;
   if (peripheral.state !== 'connected') {
+    if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (setupPeripheral) connect()'); }
     peripheral.connect();
   }
 }
@@ -607,8 +615,10 @@ export function remove(node, RED) {
     delete periphNodes[address][node.id].peripheral;
     delete periphNodes[address][node.id];
     if (Object.keys(periphNodes[address]).length === 0) {
+      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (remove) terminate()'); }
       peripheral.terminate();
     } else {
+      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (remove) disconnect()'); }
       peripheral.disconnect() // will re-connect
     }
   }
