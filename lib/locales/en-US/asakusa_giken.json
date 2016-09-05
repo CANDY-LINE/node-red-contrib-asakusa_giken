@@ -3,13 +3,41 @@
     "label" : {
       "blecastBl" : "BLE Illuminance Sensor",
       "blecastTm" : "BLE Temperature Sensor",
+      "bleio": "BLEIo Module",
       "useString" : "Use string payload",
+      "localName" : "Local Name",
       "address" : "Address",
-      "uuid" : "UUID"
+      "uuid" : "UUID",
+      "initInterval" : "Initial AIN Interval (ms)",
+      "interval" : "INTERVAL",
+      "initDout" : "Initial DOUT",
+      "din" : "DIN",
+      "ain" : "AIN",
+      "dout1" : "DOUT1",
+      "dout2" : "DOUT2",
+      "dout3" : "DOUT3",
+      "dout4" : "DOUT4",
+      "dout5" : "DOUT5",
+      "dout6" : "DOUT6",
+      "dout7" : "DOUT7",
+      "dout8" : "DOUT8",
+      "initLcd" : "Initial LCD",
+      "pwm1" : "Initial PWM1",
+      "pwm2" : "Initial PWM2",
+      "pwm3" : "Initial PWM3"
     },
     "placeholder" : {
+      "optionalAddress" : "(optional) e.g. 99:ff:00:99:ff:ff",
       "address" : "e.g. 99:ff:00:99:ff:ff",
-      "uuid" : "(optional)"
+      "uuid" : "(optional)",
+      "initInterval" : "1 to 60000 in millisec.",
+      "initLcd" : "up to 16-character text",
+      "initPwm" : "0 to 100"
+    },
+    "status": {
+      "error": "error",
+      "connected": "connected",
+      "disconnected": "disconnected"
     },
     "message": {
       "start-scanning": "[BLE] Start Scanning...",
@@ -17,6 +45,9 @@
       "setup-done": "[BLE] Set up done"
     },
     "errors" : {
+      "unexpected-type": "[BLEIo] Unexpected type:[__type__]",
+      "unexpected-peripheral": "[BLE] Unexpected peripheral, disconnecting",
+      "missing-localName": "[BLE] Missing localName for the node [__id__]",
       "unknown-peripheral": "[BLE] Unknown peripheral: category=[__categoryName__], peripheral.address=[__peripheralAddress__], peripheral.uuid=[__peripheralUuid__]",
       "wrong-category": "[BLE] The peripheral(address:[__peripheralAddress__], uuid:[__peripheralUuid__]) sohuld be defined in __correctCategory__ node (currently in __wrongCategory__ node)",
       "unknown-uuid": "[BLE] Unknown node: category=[__categoryName__], peripheral.uuid=[__peripheralUuid__]",
