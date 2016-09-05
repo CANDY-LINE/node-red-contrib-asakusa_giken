@@ -178,6 +178,20 @@ let unknown = LRU({
 
 let associationTask = null;
 
+export function reset() {
+  Object.keys(bleioPeripherals).forEach((localName) => {
+    delete bleioPeripherals[localName];
+  });
+  Object.keys(bleioNodes).forEach((address) => {
+    delete bleioNodes[address];
+  });
+  unknown.reset();
+  if (associationTask) {
+    cancelTimeout(associationTask);
+    associationTask = null;
+  }
+}
+
 export function acceptFunc(localName) {
   return !!(localName &&
     (localName.indexOf('BLEIo_') === 0 && localName.length === 7));
