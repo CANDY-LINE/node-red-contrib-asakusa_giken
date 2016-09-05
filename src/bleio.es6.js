@@ -502,6 +502,7 @@ function setupPeripheral(peripheral, RED) {
 }
 
 function startAssociationTask(RED) {
+  if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (startAssociationTask) start'); }
   let retry = false;
   let unassociated = [];
   let associated = [];
@@ -552,6 +553,7 @@ function startAssociationTask(RED) {
       }
       return false;
     }).forEach(peripheral => {
+      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (startAssociationTask) setupPeripheral()'); }
       retry = setupPeripheral(peripheral, RED);
     });
   });
@@ -567,9 +569,11 @@ function startAssociationTask(RED) {
       startAssociationTask(RED);
     }, 1000);
   }
+  if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (startAssociationTask) end'); }
 }
 
 export function register(node, RED) {
+  if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (register) start'); }
   if (!node || !node.bleioNode) {
     throw new Error('invalid node');
   }
@@ -590,6 +594,7 @@ export function register(node, RED) {
   if (!associationTask) {
     startAssociationTask(RED);
   }
+  if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (register) end'); }
 }
 
 export function remove(node, RED) {
