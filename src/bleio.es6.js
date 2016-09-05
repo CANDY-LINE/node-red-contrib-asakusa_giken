@@ -328,13 +328,13 @@ function readDataFunc(characteristics) {
 function setupPeripheral(peripheral, RED) {
   if (peripheral.instrumented) {
     if (peripheral.state !== 'connected') {
-      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (setupPeripheral:instrumented) connect()'); }
+      if (CONN_DEBUG) { RED.log.info(`[CONN_DEBUG] (setupPeripheral:instrumented) connect() => peripheral.terminated ${peripheral.terminated ? 'Yes' : 'No'}`); }
       peripheral.connect();
     } else {
-      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (setupPeripheral:instrumented) disconnect()'); }
+      if (CONN_DEBUG) { RED.log.info(`[CONN_DEBUG] (setupPeripheral:instrumented) disconnect() => peripheral.terminated ${peripheral.terminated ? 'Yes' : 'No'}`); }
       peripheral.disconnect(); // will re-connect
     }
-    return;
+    return peripheral.terminated;
   }
   let connectHandler = (err) => {
     if (err) {
