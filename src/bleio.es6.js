@@ -374,40 +374,40 @@ function setupPeripheral(peripheral, RED) {
         characteristics.forEach((c) => {
           let uuid = c.uuid.toLowerCase();
           if (!c.subscribed) {
-            c.subscribe((err) => {
-              if (err) {
-                RED.log.error(err);
-                RED.log.error(RED._('asakusa_giken.errors.unexpected-peripheral'));
-                if (peripheral) {
-                  peripheral.disconnect();
-                }
-                return;
+            c.subscribed = true;
+            c.on('data', (data) => {
+              if (peripheral && peripheral.nodes) {
+                let now = new Date().getTime();
+                peripheral.nodes.forEach((node) => {
+                  if (node.in) {
+                    node.send({
+                      payload: {
+                        type: UUID_TO_TYPE[uuid],
+                        val: UUID_VAL_PARSER[uuid](data),
+                        tstamp: now,
+                        rssi: peripheral.rssi,
+                        address: peripheral.address,
+                        uuid: peripheral.uuid
+                      }
+                    });
+                  }
+                });
               }
-              c.on('data', (data) => {
-                if (peripheral && peripheral.nodes) {
-                  let now = new Date().getTime();
-                  peripheral.nodes.forEach((node) => {
-                    if (node.in) {
-                      node.send({
-                        payload: {
-                          type: UUID_TO_TYPE[uuid],
-                          val: UUID_VAL_PARSER[uuid](data),
-                          tstamp: now,
-                          rssi: peripheral.rssi,
-                          address: peripheral.address,
-                          uuid: peripheral.uuid
-                        }
-                      });
-                    }
-                  });
-                }
-              });
-              if ((uuid === CHR_DIN_UUID) || (uuid === CHR_AIN_UUID)) {
-                c.notify(true);
-              }
-              c.subscribed = true;
-              RED.log.info(`[BLEIo] Subscribed to ${UUID_TO_TYPE[uuid]}`);
             });
+            if ((uuid === CHR_DIN_UUID) || (uuid === CHR_AIN_UUID)) {
+              c.subscribe((err) => {
+                if (err) {
+                  RED.log.error(err);
+                  RED.log.error(RED._('asakusa_giken.errors.unexpected-peripheral'));
+                  if (peripheral) {
+                    peripheral.disconnect();
+                  }
+                  return;
+                }
+                c.notify(true);
+                RED.log.info(`[BLEIo] Subscribed to ${UUID_TO_TYPE[uuid]}`);
+              });
+            }
           }
         });
         if (peripheral.nodes) {
