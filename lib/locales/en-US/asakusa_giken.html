@@ -1,19 +1,24 @@
 <script type="text/x-red" data-help-name="BLEIo in">
    <p>Input node for GPIO BLE Module</p>
-   <p>The lx data is emitted per second.</p>
+   <p>The node emits <code>AIN</code> and <code>DIN</code> values notified by the BLEIo device.</p>
+   <p>You can also get arbitrary characteristic values available on the BLEIo device by passing <code>msg.payload</code> to BLEIo out node.</p>
    <p>The <code>msg.payload</code> format is as follows.</p>
 <table>
   <tr>
     <th>type</th>
-    <td>Type of the sensor data, <code>lx</code> for illuminance</td>
-  </tr>
-  <tr>
-    <th>unit</th>
-    <td>The unit of the temperature value. <code>lx</code> for lux</td>
+    <td>Type of the characteristics data, <code>INTERVAL</code>,
+      <code>DOUT</code>, <code>DIN</code>, <code>AIN</code>,
+      <code>LCD</code> or <code>PWM</code></td>
   </tr>
   <tr>
     <th>val</th>
-    <td>The sensor data value</td>
+    <td>
+    <p>The characteristics data value.</p>
+    <p><code>DOUT</code> characteristic has 8 boolean (true=High) properties named <code>dout1</code> to <code>dout8</code>.</p>
+    <p><code>DIN</code> characteristic has 8 boolean properties named <code>din1</code> to <code>din8</code>.</p>
+    <p><code>AIN</code> characteristic has 6 float properties named <code>ain1</code> to <code>ain6</code>.</p>
+    <p><code>PWM</code> characteristic has 3 int properties named <code>pwm1</code> to <code>pwm3</code>.</p>
+    </td>
   </tr>
   <tr>
     <th>tstamp</th>
@@ -25,69 +30,65 @@
   </tr>
   <tr>
     <th>address</th>
-    <td>The BLE address, mandatory for <b>non-macOS</b> users</td>
+    <td>The BLE address if available</td>
   </tr>
   <tr>
     <th>uuid</th>
-    <td>The BLE UUID, mandatory for <b>macOS</b> users</td>
+    <td>The BLE UUID if available</td>
   </tr>
 </table>
    <p>The typical JSON payload is shown as below.
 <pre>{
-  "type":"lx",
-  "unit":"lx",
-  "val":37
-  "tstamp":1448259848905,
-  "rssi":-59,
-  "address":"aa:bb:cc:99:99:99",
-  "uuid":"e23520e001714e99b8afc51fcee28b35"
+  "type": "AIN",
+  "val": {
+    "ain1": 0.601171875,
+    "ain2": 0.6257812500000001,
+    "ain3": 0.6257812500000001,
+    "ain4": 0.6257812500000001,
+    "ain5": 0.6257812500000001,
+    "ain6": 0.6046875
+  },
+  "tstamp": 1473079281706,
+  "rssi": -65,
+  "address": "c0:96:99:99:99:99",
+  "uuid": "b6f6a2d79b7145ba835b1e2b99999999"
 }</pre>
     </p>
 </script>
 
 <script type="text/x-red" data-help-name="BLEIo out">
    <p>Output node for GPIO BLE Module</p>
-   <p>The temperature data is emitted per second.</p>
+   <p>This node allows you to update GPIO pins, LCD text and notification interval on the BLEIo device.</p>
+   <p>You can also post a <code>msg.payload</code> without <code>val</code> property to this node in order for BLEIo in node to emit the corresponding characteristic value(s).</p>
    <p>The <code>msg.payload</code> format is as follows.</p>
 <table>
   <tr>
     <th>type</th>
-    <td>Type of the sensor data, <code>te</code> for temperature</td>
-  </tr>
-  <tr>
-    <th>unit</th>
-    <td>The unit of the temperature value. <code>C</code> for Celcius</td>
+    <td>Type of the characteristics data, <code>INTERVAL</code>,
+      <code>DOUT</code>, <code>DIN</code>, <code>AIN</code>,
+      <code>LCD</code> or <code>PWM</code></td>
   </tr>
   <tr>
     <th>val</th>
-    <td>The sensor data value</td>
-  </tr>
-  <tr>
-    <th>tstamp</th>
-    <td>Epoch time in milliseconds</td>
-  </tr>
-  <tr>
-    <th>rssi</th>
-    <td>The signal strength in dBm</td>
-  </tr>
-  <tr>
-    <th>address</th>
-    <td>The BLE address, mandatory for <b>non-macOS</b> users</td>
-  </tr>
-  <tr>
-    <th>uuid</th>
-    <td>The BLE UUID, mandatory for <b>macOS</b> users</td>
+    <td>
+    <p>
+      The value to be written to the characteristic. Or leave empty when inquirying
+      a characteristic value to the BLEIo device.
+    </p>
+    <p><code>DOUT</code> characteristic can have 8 boolean (true=High) properties named <code>dout1</code> to <code>dout8</code>.</p>
+    <p><code>DIN</code> characteristic can have 8 boolean properties named <code>din1</code> to <code>din8</code>.</p>
+    <p><code>AIN</code> characteristic can have 6 float properties named <code>ain1</code> to <code>ain6</code>.</p>
+    <p><code>PWM</code> characteristic can have 3 int properties named <code>pwm1</code> to <code>pwm3</code>.</p>
+    </td>
   </tr>
 </table>
-   <p>The typical JSON payload is shown as below.
+   <p>The typical JSON payload is shown as below. The boolean values shows the pin state, true for HIGH, false for LOW.
 <pre>{
-  "type":"te",
-  "unit":"C",
-  "val":20,
-  "tstamp":1448259848905,
-  "rssi":-59,
-  "address":"33-22-11-99-88-77",
-  "uuid":"eb2b906bb56e4ddeb11000be1f4d6041"
+  "type":"DOUT",
+  "val": {
+    "dout1": false,
+    "dout6": true
+  }
 }</pre>
     </p>
 </script>
