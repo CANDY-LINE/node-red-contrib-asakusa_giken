@@ -187,7 +187,7 @@ export function reset() {
   });
   unknown.reset();
   if (associationTask) {
-    cancelTimeout(associationTask);
+    clearTimeout(associationTask);
     associationTask = null;
   }
 }
