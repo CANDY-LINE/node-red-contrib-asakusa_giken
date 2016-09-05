@@ -560,7 +560,7 @@ function startAssociationTask(RED) {
   });
   if (unassociated.length > 0 && (associated.length !== unassociated.length)) {
     retry = true;
-    if (CONN_DEBUG) { RED.log.info(`[CONN_DEBUG] (startAssociationTask) unassociated=${JSON.stringify(unassociated)}, associated=${JSON.stringify(associated)}`); }
+    if (CONN_DEBUG) { RED.log.info(`[CONN_DEBUG] (startAssociationTask) unassociated=${unassociated}, associated=${associated}`); }
   }
   if (associationTask) {
     clearTimeout(associationTask);
