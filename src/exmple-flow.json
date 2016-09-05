@@ -1,0 +1,256 @@
+[
+    {
+        "id": "2bb37a8a.bca9ae",
+        "type": "tab",
+        "label": "BLEIo Example Flow"
+    },
+    {
+        "id": "6125a324.89e8e4",
+        "type": "BLEIo out",
+        "z": "2bb37a8a.bca9ae",
+        "name": "",
+        "bleio": "dc986143.3ba81",
+        "useString": false,
+        "x": 370,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "45617f8.0e83d",
+        "type": "inject",
+        "z": "2bb37a8a.bca9ae",
+        "name": "Write LCD text",
+        "topic": "",
+        "payload": "{\"type\":\"LCD\",\"val\":\"ｷｬﾝﾃﾞｨ!!\"}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 140,
+        "y": 60,
+        "wires": [
+            [
+                "6125a324.89e8e4"
+            ]
+        ]
+    },
+    {
+        "id": "646698e6.5bd79",
+        "type": "BLEIo in",
+        "z": "2bb37a8a.bca9ae",
+        "name": "",
+        "bleio": "dc986143.3ba81",
+        "useString": false,
+        "x": 376.5,
+        "y": 413.5,
+        "wires": [
+            [
+                "df98b48b.3daf3"
+            ]
+        ]
+    },
+    {
+        "id": "df98b48b.3daf3",
+        "type": "debug",
+        "z": "2bb37a8a.bca9ae",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 556.5,
+        "y": 413.5,
+        "wires": []
+    },
+    {
+        "id": "31185cb9.65f18c",
+        "type": "inject",
+        "z": "2bb37a8a.bca9ae",
+        "name": "",
+        "topic": "",
+        "payload": "{\"type\":\"LCD\"}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 140,
+        "y": 360,
+        "wires": [
+            [
+                "6125a324.89e8e4"
+            ]
+        ]
+    },
+    {
+        "id": "9b117e5.22377",
+        "type": "inject",
+        "z": "2bb37a8a.bca9ae",
+        "name": "",
+        "topic": "",
+        "payload": "{\"type\":\"DOUT\"}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 140,
+        "y": 320,
+        "wires": [
+            [
+                "6125a324.89e8e4"
+            ]
+        ]
+    },
+    {
+        "id": "8144aac2.2a6048",
+        "type": "inject",
+        "z": "2bb37a8a.bca9ae",
+        "name": "",
+        "topic": "",
+        "payload": "{\"type\":\"DIN\"}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 130,
+        "y": 280,
+        "wires": [
+            [
+                "6125a324.89e8e4"
+            ]
+        ]
+    },
+    {
+        "id": "a55c69bd.3e4a58",
+        "type": "inject",
+        "z": "2bb37a8a.bca9ae",
+        "name": "",
+        "topic": "",
+        "payload": "{\"type\":\"AIN\"}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 130,
+        "y": 400,
+        "wires": [
+            [
+                "6125a324.89e8e4"
+            ]
+        ]
+    },
+    {
+        "id": "824f2319.7e9b48",
+        "type": "inject",
+        "z": "2bb37a8a.bca9ae",
+        "name": "",
+        "topic": "",
+        "payload": "{\"type\":\"PWM\"}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 140,
+        "y": 440,
+        "wires": [
+            [
+                "6125a324.89e8e4"
+            ]
+        ]
+    },
+    {
+        "id": "fc620cb0.8e16d",
+        "type": "inject",
+        "z": "2bb37a8a.bca9ae",
+        "name": "",
+        "topic": "",
+        "payload": "{\"type\":\"INTERVAL\"}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 150,
+        "y": 240,
+        "wires": [
+            [
+                "6125a324.89e8e4"
+            ]
+        ]
+    },
+    {
+        "id": "66abc9d.6250cb8",
+        "type": "inject",
+        "z": "2bb37a8a.bca9ae",
+        "name": "Write LCD text 2",
+        "topic": "",
+        "payload": "{\"type\":\"LCD\",\"val\":\"        ﾆｷﾞｮｳﾒ!\"}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 140,
+        "y": 100,
+        "wires": [
+            [
+                "6125a324.89e8e4"
+            ]
+        ]
+    },
+    {
+        "id": "b20a6db0.da8b28",
+        "type": "inject",
+        "z": "2bb37a8a.bca9ae",
+        "name": "DOUT1 High",
+        "topic": "",
+        "payload": "{\"type\":\"DOUT\",\"val\":{\"dout1\":true}}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 130,
+        "y": 140,
+        "wires": [
+            [
+                "6125a324.89e8e4"
+            ]
+        ]
+    },
+    {
+        "id": "fc51684d.75d688",
+        "type": "inject",
+        "z": "2bb37a8a.bca9ae",
+        "name": "DOUT1 Low",
+        "topic": "",
+        "payload": "{\"type\":\"DOUT\",\"val\":{\"dout1\":false}}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 130,
+        "y": 180,
+        "wires": [
+            [
+                "6125a324.89e8e4"
+            ]
+        ]
+    },
+    {
+        "id": "dc986143.3ba81",
+        "type": "BLEIo",
+        "z": "2bb37a8a.bca9ae",
+        "localName": "BLEIo_0",
+        "address": "",
+        "uuid": "",
+        "initInterval": "5000",
+        "initDout1": false,
+        "initDout2": true,
+        "initDout3": false,
+        "initDout4": false,
+        "initDout5": false,
+        "initDout6": false,
+        "initDout7": true,
+        "initDout8": false,
+        "initLcd": "¡Hóla!",
+        "initPwm1": "0",
+        "initPwm2": "0",
+        "initPwm3": "0"
+    }
+]

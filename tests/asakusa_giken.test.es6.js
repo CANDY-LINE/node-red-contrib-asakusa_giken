@@ -1,10 +1,12 @@
 'use strict';
 
+import 'source-map-support/register';
 import * as sinon from 'sinon';
 import { assert } from 'chai';
 import RED from 'node-red';
 import asakusaGikenModule from '../lib/asakusa_giken';
 import * as ble from '../lib/ble';
+import * as blecast from '../lib/blecast';
 
 let server = sinon.spy();
 let settings = sinon.spy();
@@ -20,9 +22,9 @@ describe('asakusa_giken node', () => {
 	afterEach(() => {
 		sandbox = sandbox.restore();
 	});
-  describe('ble module', () => {
-    it('ble', () => {
-      ble.clear(RED);
+  describe('blecast module', () => {
+    it('should be able to clear caches', () => {
+      blecast.clear(RED);
     });
   });
   describe('asakusa_giken module', () => {

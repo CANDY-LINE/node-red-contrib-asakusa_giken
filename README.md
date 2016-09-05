@@ -1,18 +1,36 @@
 Asakusa Giken BLE device Node-RED nodes
 ===
 
+[![GitHub release](https://img.shields.io/github/release/CANDY-LINE/node-red-contrib-asakusa_giken.svg)](https://github.com/CANDY-LINE/node-red-contrib-asakusa_giken/releases/latest)
+[![master Build Status](https://travis-ci.org/CANDY-LINE/node-red-contrib-asakusa_giken.svg?branch=master)](https://travis-ci.org/CANDY-LINE/node-red-contrib-asakusa_giken/)
+[![License MIT](https://img.shields.io/github/license/CANDY-LINE/node-red-contrib-asakusa_giken.svg)](http://opensource.org/licenses/MIT)
+
+
 This project offers the following BLE device nodes manufactured by Asakusa Giken.
 
 1. [BLECAST_TM](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%2FBLECAST_TM.html) ... A BLE temperature sensor device
 1. [BLECAST_BL](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%2FBLECAST_BL.html) ... A BLE illuminance sensor device
+1. [BLEIo](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%2FBLEIo.html) ... GPIO BLE board
 
 浅草ギ研 BLECAST Node-RED ノード
 ===
 
-浅草ギ研 BLECASTの以下のデバイスに対応したNode-REDノードです。
+浅草ギ研 BLE対応製品の以下のデバイスに対応したNode-REDノードです。
 
 1. [BLECAST_TM](http://www.robotsfx.com/robot/BLECAST_TM.html) ... BLE 温度センサー
 1. [BLECAST_BL](http://www.robotsfx.com/robot/BLECAST_BL.html) ... BLE 照度センサー
+1. [BLEIo](http://www.robotsfx.com/robot/BLEIo.html) ... 汎用I/O BLEモジュール
+
+## サンプルフロー
+
+BLEIo向けのサンプルフロー[`example-flow.json`](https://raw.githubusercontent.com/CANDY-LINE/node-red-contrib-asakusa_giken/master/src/example-flow.json) が利用可能です。クリックして中身を表示してから全体をコピーし、Node-REDの`Import`から`Clipboard`を選択して内容を貼り付けてください。
+
+# Install
+
+```
+cd ~/.node-red # or your own userDir where Node-RED saves flow file
+npm install --unsafe-perm node-red-contrib-asakusa_giken
+```
 
 # Development
 
@@ -20,7 +38,7 @@ This project offers the following BLE device nodes manufactured by Asakusa Giken
 
 Then, try this.
 ```
-$ npm install
+$ npm install --unsafe-perm
 ```
 
 ## How to build
@@ -31,6 +49,8 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* 2.0.0
+    - Add a new node for BLEIo
 
 * 1.2.0
     - Reset BLE address cache on deploying nodes
@@ -45,6 +65,6 @@ will generate ES5 js files.
 
 # Copyright and License
 
-PNG images under icon folder are released under [CC BY-NC-SA](http://creativecommons.org/licenses/by-nc-sa/4.0/), copyright 2016 [Robotma.com](http://www.robotma.com).
+PNG images under icon folder are released under [CC BY-NC-SA](http://creativecommons.org/licenses/by-nc-sa/4.0/), copyright 2016 [CANDY Line, Inc.](http://www.candy-line.io).
 
 The project is released under MIT License. See LICENSE for detail.
