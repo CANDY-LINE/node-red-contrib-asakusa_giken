@@ -475,6 +475,8 @@ function setupPeripheral(peripheral, RED) {
       if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (disconnectHandler) re-connect()'); }
       peripheral.connect();
     }
+    // Mark disconnect event done
+    peripheral.instrumented = false;
   };
   peripheral.on('connect', connectHandler);
   peripheral.on('disconnect', disconnectHandler);
@@ -496,6 +498,7 @@ function setupPeripheral(peripheral, RED) {
     if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (setupPeripheral) connect()'); }
     peripheral.connect();
   }
+  return false;
 }
 
 function startAssociationTask(RED) {
@@ -549,7 +552,7 @@ function startAssociationTask(RED) {
       }
       return false;
     }).forEach(peripheral => {
-      setupPeripheral(peripheral, RED);
+      retry = setupPeripheral(peripheral, RED);
     });
   });
   if (unassociated.length > 0 && (associated.length !== unassociated.length)) {
