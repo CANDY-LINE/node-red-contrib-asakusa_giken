@@ -109,6 +109,7 @@ describe('bleio module', () => {
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
     RED._ = sinon.spy();
+    bleio.reset();
   });
   afterEach(() => {
     sandbox = sandbox.restore();
@@ -130,6 +131,7 @@ describe('bleio module', () => {
     let characteristics;
     let sandbox;
     beforeEach(() => {
+      bleio.reset();
       sandbox = sinon.sandbox.create();
       testPeripheral = sandbox.stub({
         on: () => {},
@@ -145,7 +147,7 @@ describe('bleio module', () => {
         send: () => {},
         on: () => {},
         emit: () => {},
-        in: true,
+        in: false,
         bleioNode: {
           localName: 'BLEIo_0',
           address: 'CC:5E:66:DD:0B:88'
@@ -174,6 +176,7 @@ describe('bleio module', () => {
         id: '2222'
       });
       characteristics = BLEIO_CHARS.map((c) => {
+        c.subscribed = false;
         return sandbox.stub(c);
       });
     });
@@ -212,7 +215,7 @@ describe('bleio module', () => {
             assert.equal(1, characteristics.filter((c) => {
               return c.read.called;
             }).length);
-            assert.isTrue(testNode.send.called);
+            assert.isFalse(testNode.send.called);
             return done();
           }
           setTimeout(waitUntilDone, 1000);
@@ -223,10 +226,26 @@ describe('bleio module', () => {
         }, 2000);
       }).timeout(10000);
       it('should register a new node with wildcard', done => {
+        // connect
+        testPeripheral2.on.onFirstCall().yields(null);
+        testPeripheral2.discoverSomeServicesAndCharacteristics.yields(
+          null, null, characteristics);
+        characteristics.forEach((c) => {
+          c.subscribe.yields(null);
+          // on('data') => node.send()
+          c.on.yields(new Buffer('12', 'hex'), true);
+        });
+
+        // disconnect
+        testPeripheral2.on.onSecondCall().yields(null);
+
         delete testNode2.peripheral;
+        console.log('<<<<register=========================================');
         bleio.register(testNode2, RED);
         function waitUntilDone() {
           if (testNode2.peripheral) {
+            console.log('>>>register=========================================');
+            assert.isTrue(testNode2.send.called);
             return done();
           }
           setTimeout(waitUntilDone, 1000);
@@ -278,6 +297,9 @@ describe('registration and removal without stub', () => {
     },
     id: '2222'
   };
+  before(() => {
+    bleio.reset();
+  });
   describe('register()', () => {
     it('should register a new node', done => {
       delete testNode.peripheral;

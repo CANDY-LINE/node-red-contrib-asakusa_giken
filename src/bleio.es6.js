@@ -412,6 +412,9 @@ function setupPeripheral(peripheral, RED) {
         });
         if (peripheral.nodes) {
           peripheral.nodes.forEach((node) => {
+            if (node.in) {
+              return;
+            }
             node.on('input', (msg) => {
               let values = msg.payload;
               if (!values) {
@@ -429,10 +432,10 @@ function setupPeripheral(peripheral, RED) {
                   RED.log.error(RED._('asakusa_giken.errors.unexpected-type', {type:v.type}));
                   return;
                 }
-                if (node.in) {
-                  peripheral.readData(uuid);
-                } else {
+                if (v.val) {
                   peripheral.writeData(uuid, v.val);
+                } else {
+                  peripheral.readData(uuid);
                 }
               });
             });
