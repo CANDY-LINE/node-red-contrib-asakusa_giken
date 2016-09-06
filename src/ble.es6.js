@@ -94,6 +94,7 @@ export function start(RED) {
       } else {
         noble.stopScanning();
         isScanning = false;
+        RED.log.info(RED._('asakusa_giken.message.stop-scanning'));
       }
     });
     if (!isScanning && noble.state === 'poweredOn') {
