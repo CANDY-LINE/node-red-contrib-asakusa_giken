@@ -78,7 +78,11 @@ export function start(RED) {
     handlers.push(stop);
   } else {
     handlers = [stop];
-    RED.settings.exitHandlers = handlers;
+    try {
+      RED.settings.exitHandlers = handlers;
+    } catch (_) {
+      // ignore
+    }
   }
   return new Promise(resolve => {
     if (isScanning) {
