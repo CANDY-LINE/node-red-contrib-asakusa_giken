@@ -199,6 +199,7 @@ export function acceptFunc(localName) {
 }
 
 export function discoverFunc(localName, peripheral, RED) {
+  if (CONN_DEBUG) { RED.log.info(`[CONN_DEBUG] (discoverFunc) [${localName}:${peripheral.address}] ${peripheral.state}`); }
   if (!bleioPeripherals[localName]) {
     bleioPeripherals[localName] = [];
   }
@@ -458,7 +459,6 @@ function setupPeripheral(peripheral, RED) {
       }
       return;
     }
-    if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (disconnectHandler) disconnected!'); }
     Object.keys(bleioPeripherals).forEach((localName) => {
       let ary = bleioPeripherals[localName];
       let i = ary.indexOf(peripheral);
@@ -471,7 +471,9 @@ function setupPeripheral(peripheral, RED) {
         node.emit('closed');
       });
     }
-    if (!peripheral.terminated) {
+    if (peripheral.terminated) {
+      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (disconnectHandler) terminated!'); }
+    } else {
       if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (disconnectHandler) re-connect()'); }
       peripheral.connect();
     }
@@ -571,7 +573,7 @@ function startAssociationTask(RED) {
       startAssociationTask(RED);
     }, 1000);
   }
-  if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (startAssociationTask) end'); }
+  if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (startAssociationTask) end (retry=' + retry + ')'); }
 }
 
 export function register(node, RED) {
