@@ -49,6 +49,9 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* 2.0.1
+    - Fix an issue where noble with Bluez didn't fire a discover event once a peripheral was connected
+
 * 2.0.0
     - Add a new node for BLEIo
 
