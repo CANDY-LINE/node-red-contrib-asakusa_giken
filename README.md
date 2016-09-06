@@ -23,7 +23,7 @@ This project offers the following BLE device nodes manufactured by Asakusa Giken
 
 ## サンプルフロー
 
-BLEIo向けのサンプルフロー[`example-flow.json`](https://raw.githubusercontent.com/CANDY-LINE/node-red-contrib-asakusa_giken/master/src/example-flow.json) が利用可能です。クリックして中身を表示してから全体をコピーし、Node-REDの`Import`から`Clipboard`を選択して内容を貼り付けてください。
+BLEIo向けのサンプルフロー[`example-flow.json`](https://github.com/CANDY-LINE/node-red-contrib-asakusa_giken/blob/develop/src/exmple-flow.json) が利用可能です。クリックして中身を表示してから全体をコピーし、Node-REDの`Import`から`Clipboard`を選択して内容を貼り付けてください。
 
 # Install
 
@@ -49,6 +49,9 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* 2.0.1
+    - Fix an issue where noble with Bluez didn't fire a discover event once a peripheral was connected
+
 * 2.0.0
     - Add a new node for BLEIo
 
