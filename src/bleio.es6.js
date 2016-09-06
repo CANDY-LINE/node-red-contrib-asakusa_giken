@@ -2,6 +2,7 @@
 
 import Promise from 'es6-promises';
 import LRU from 'lru-cache';
+import * as ble from './ble';
 
 const CONN_DEBUG = false;
 const TAG = '[BLEIo]'
@@ -491,6 +492,8 @@ function setupPeripheral(peripheral, RED) {
       if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (terminate) disconnect()'); }
       peripheral.disconnect((err) => {
         disconnectHandler(err);
+        ble.stop(RED);
+        ble.start(RED);
       });
     }
   };
