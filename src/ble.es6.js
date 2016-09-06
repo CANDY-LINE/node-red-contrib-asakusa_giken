@@ -78,7 +78,11 @@ export function start(RED) {
     handlers.push(stop);
   } else {
     handlers = [stop];
-    RED.settings.exitHandlers = handlers;
+    try {
+      RED.settings.exitHandlers = handlers;
+    } catch (_) {
+      // ignore
+    }
   }
   return new Promise(resolve => {
     if (isScanning) {
@@ -94,6 +98,7 @@ export function start(RED) {
       } else {
         noble.stopScanning();
         isScanning = false;
+        RED.log.info(RED._('asakusa_giken.message.stop-scanning'));
       }
     });
     if (!isScanning && noble.state === 'poweredOn') {

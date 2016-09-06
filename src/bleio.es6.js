@@ -2,7 +2,9 @@
 
 import Promise from 'es6-promises';
 import LRU from 'lru-cache';
+import * as ble from './ble';
 
+const CONN_DEBUG = false;
 const TAG = '[BLEIo]'
 const SERVICE_UUID = 'feed0001594246d5ade581c064d03a03';
 
@@ -198,6 +200,7 @@ export function acceptFunc(localName) {
 }
 
 export function discoverFunc(localName, peripheral, RED) {
+  if (CONN_DEBUG) { RED.log.info(`[CONN_DEBUG] (discoverFunc) [${localName}:${peripheral.address}] ${peripheral.state}`); }
   if (!bleioPeripherals[localName]) {
     bleioPeripherals[localName] = [];
   }
@@ -327,17 +330,20 @@ function readDataFunc(characteristics) {
 function setupPeripheral(peripheral, RED) {
   if (peripheral.instrumented) {
     if (peripheral.state !== 'connected') {
+      if (CONN_DEBUG) { RED.log.info(`[CONN_DEBUG] (setupPeripheral:instrumented) connect() => peripheral.terminated ${peripheral.terminated ? 'Yes' : 'No'}`); }
       peripheral.connect();
     } else {
+      if (CONN_DEBUG) { RED.log.info(`[CONN_DEBUG] (setupPeripheral:instrumented) disconnect() => peripheral.terminated ${peripheral.terminated ? 'Yes' : 'No'}`); }
       peripheral.disconnect(); // will re-connect
     }
-    return;
+    return peripheral.terminated;
   }
   let connectHandler = (err) => {
     if (err) {
       RED.log.error(`[BLEIo:connect] err=${err}`);
       return;
     }
+    if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (connectHandler) connected!'); }
     if (peripheral && peripheral.nodes) {
       peripheral.nodes.forEach((node) => {
         node.emit('opened');
@@ -374,40 +380,40 @@ function setupPeripheral(peripheral, RED) {
         characteristics.forEach((c) => {
           let uuid = c.uuid.toLowerCase();
           if (!c.subscribed) {
-            c.subscribe((err) => {
-              if (err) {
-                RED.log.error(err);
-                RED.log.error(RED._('asakusa_giken.errors.unexpected-peripheral'));
-                if (peripheral) {
-                  peripheral.disconnect();
-                }
-                return;
+            c.subscribed = true;
+            c.on('data', (data) => {
+              if (peripheral && peripheral.nodes) {
+                let now = new Date().getTime();
+                peripheral.nodes.forEach((node) => {
+                  if (node.in) {
+                    node.send({
+                      payload: {
+                        type: UUID_TO_TYPE[uuid],
+                        val: UUID_VAL_PARSER[uuid](data),
+                        tstamp: now,
+                        rssi: peripheral.rssi,
+                        address: peripheral.address,
+                        uuid: peripheral.uuid
+                      }
+                    });
+                  }
+                });
               }
-              c.on('data', (data) => {
-                if (peripheral && peripheral.nodes) {
-                  let now = new Date().getTime();
-                  peripheral.nodes.forEach((node) => {
-                    if (node.in) {
-                      node.send({
-                        payload: {
-                          type: UUID_TO_TYPE[uuid],
-                          val: UUID_VAL_PARSER[uuid](data),
-                          tstamp: now,
-                          rssi: peripheral.rssi,
-                          address: peripheral.address,
-                          uuid: peripheral.uuid
-                        }
-                      });
-                    }
-                  });
-                }
-              });
-              if ((uuid === CHR_DIN_UUID) || (uuid === CHR_AIN_UUID)) {
-                c.notify(true);
-              }
-              c.subscribed = true;
-              RED.log.info(`[BLEIo] Subscribed to ${UUID_TO_TYPE[uuid]}`);
             });
+            if ((uuid === CHR_DIN_UUID) || (uuid === CHR_AIN_UUID)) {
+              c.subscribe((err) => {
+                if (err) {
+                  RED.log.error(err);
+                  RED.log.error(RED._('asakusa_giken.errors.unexpected-peripheral'));
+                  if (peripheral) {
+                    peripheral.disconnect();
+                  }
+                  return;
+                }
+                c.notify(true);
+                RED.log.info(`[BLEIo] Subscribed to ${UUID_TO_TYPE[uuid]}`);
+              });
+            }
           }
         });
         if (peripheral.nodes) {
@@ -466,9 +472,14 @@ function setupPeripheral(peripheral, RED) {
         node.emit('closed');
       });
     }
-    if (!peripheral.terminated) {
+    if (peripheral.terminated) {
+      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (disconnectHandler) terminated!'); }
+    } else {
+      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (disconnectHandler) re-connect()'); }
       peripheral.connect();
     }
+    // Mark disconnect event done
+    peripheral.instrumented = false;
   };
   peripheral.on('connect', connectHandler);
   peripheral.on('disconnect', disconnectHandler);
@@ -478,19 +489,25 @@ function setupPeripheral(peripheral, RED) {
     peripheral.removeListener('connect', connectHandler);
     peripheral.removeListener('disconnect', disconnectHandler);
     if (peripheral.state !== 'disconnected') {
+      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (terminate) disconnect()'); }
       peripheral.disconnect((err) => {
         disconnectHandler(err);
+        ble.stop(RED);
+        ble.start(RED);
       });
     }
   };
   peripheral.instrumented = true;
   peripheral.terminated = false;
   if (peripheral.state !== 'connected') {
+    if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (setupPeripheral) connect()'); }
     peripheral.connect();
   }
+  return false;
 }
 
 function startAssociationTask(RED) {
+  if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (startAssociationTask) start'); }
   let retry = false;
   let unassociated = [];
   let associated = [];
@@ -541,11 +558,14 @@ function startAssociationTask(RED) {
       }
       return false;
     }).forEach(peripheral => {
-      setupPeripheral(peripheral, RED);
+      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (startAssociationTask) setupPeripheral()'); }
+      retry = setupPeripheral(peripheral, RED);
+      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (startAssociationTask) setupPeripheral() done: retry=' + retry); }
     });
   });
   if (unassociated.length > 0 && (associated.length !== unassociated.length)) {
     retry = true;
+    if (CONN_DEBUG) { RED.log.info(`[CONN_DEBUG] (startAssociationTask) unassociated=${unassociated}, associated=${associated}`); }
   }
   if (associationTask) {
     clearTimeout(associationTask);
@@ -556,9 +576,11 @@ function startAssociationTask(RED) {
       startAssociationTask(RED);
     }, 1000);
   }
+  if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (startAssociationTask) end (retry=' + retry + ')'); }
 }
 
 export function register(node, RED) {
+  if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (register) start'); }
   if (!node || !node.bleioNode) {
     throw new Error('invalid node');
   }
@@ -579,6 +601,7 @@ export function register(node, RED) {
   if (!associationTask) {
     startAssociationTask(RED);
   }
+  if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (register) end'); }
 }
 
 export function remove(node, RED) {
@@ -607,8 +630,10 @@ export function remove(node, RED) {
     delete periphNodes[address][node.id].peripheral;
     delete periphNodes[address][node.id];
     if (Object.keys(periphNodes[address]).length === 0) {
+      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (remove) terminate()'); }
       peripheral.terminate();
     } else {
+      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (remove) disconnect()'); }
       peripheral.disconnect() // will re-connect
     }
   }
