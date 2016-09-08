@@ -49,6 +49,10 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* 2.0.2
+    - Fix an issue where Chrome browser failed to evaluate variable declarations because of a lack of 'use restrict'
+    - Fix an issue where BLECAST_BL and BLECAST_TM descriptions were missing
+
 * 2.0.1
     - Fix an issue where noble with Bluez didn't fire a discover event once a peripheral was connected
 
