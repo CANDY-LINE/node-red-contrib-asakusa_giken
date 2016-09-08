@@ -49,6 +49,9 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* 2.0.3
+    - Fix an issue where blecast module threw undefined error
+
 * 2.0.2
     - Fix an issue where Chrome browser failed to evaluate variable declarations because of a lack of 'use restrict'
     - Fix an issue where BLECAST_BL and BLECAST_TM descriptions were missing
