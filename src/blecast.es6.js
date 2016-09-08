@@ -163,6 +163,7 @@ export function discoverFunc(categoryName, peripheral, RED) {
   }
   // send the ble node a payload if the address exists
   let removed = false;
+  let adv = peripheral.advertisement;
   bleNodes = bleNodes.filter(ele => {
     let node = RED.nodes.getNode(ele.id);
     if (!node) {
