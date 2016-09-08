@@ -13,15 +13,54 @@ RED.init(server, settings);
 describe('blecast module', () => {
   RED.debug = true;
   let sandbox;
+  let testPeripheral;
+  let testNode;
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
+    testPeripheral = sandbox.stub({
+      on: () => {},
+      removeListener: () => {},
+      discoverSomeServicesAndCharacteristics: () => {},
+      disconnect: () => {},
+      connect: () => {},
+      terminate: () => {},
+      address: 'address123',
+      uuid: 'uuid123',
+      advertisement: {},
+      test: true
+    });
+    testNode = sandbox.stub({
+      on: () => {},
+      emit: () => {},
+      in: false,
+      blecastTmNode: {
+        send: () => {},
+        localName: 'BLECAST_TM',
+        address: 'address123'
+      },
+      id: '1111'
+    });
     RED._ = sinon.spy();
+    RED.nodes = sandbox.stub({
+      getNode: () => {}
+    });
   });
   afterEach(() => {
     sandbox = sandbox.restore();
   });
+  describe('regisetrIn', () => {
+    it('should register a node to peripheralsIn[category]', done => {
+      blecast.registerIn(testNode, 'BLECAST_TM', 'address123', 'uuid123',
+        () => { return {}; }, false, RED);
+      console.log('<<<<discoverFunc=========================================');
+      RED.nodes.getNode.returns(testNode.blecastTmNode);
+      assert.isTrue(blecast.discoverFunc('BLECAST_TM', testPeripheral, RED));
+      console.log('>>>>discoverFunc=========================================');
+      done();
+    });
+  });
   describe('removeIn', () => {
-    it('should remove node from peripheralsIn[category]', done => {
+    it('should remove the node from peripheralsIn[category]', done => {
       blecast.registerIn({id:1}, 'BLECAST_TM', 'address1', 'uuid1',
         () => {}, false, RED);
       assert.isTrue(blecast.removeIn({id:1}, 'BLECAST_TM', 'address1', 'uuid1', RED));
