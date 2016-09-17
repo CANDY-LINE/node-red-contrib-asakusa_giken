@@ -228,24 +228,33 @@ function findChr(uuid, characteristics) {
   return null;
 }
 
-function valToBuffer(hexOrIntArray) {
+export function valToBuffer(hexOrIntArray, len=1) {
   if (Buffer.isBuffer(hexOrIntArray)) {
     return hexOrIntArray;
   }
   if (typeof hexOrIntArray === 'number') {
     let rawHex = parseInt(hexOrIntArray).toString(16);
+    if (rawHex.length < (len * 2)) {
+      rawHex = Array((len * 2) - rawHex.length + 1).join('0') + rawHex;
+    }
     if (rawHex.length % 2 === 1) {
-      rawHex += '0';
+      rawHex = '0' + rawHex;
     }
     return new Buffer(rawHex, 'hex');
   }
   if (typeof hexOrIntArray === 'string') {
+    if (hexOrIntArray.length < (len * 2)) {
+      hexOrIntArray = Array((len * 2) - hexOrIntArray.length + 1).join('0') + hexOrIntArray;
+    }
     if (hexOrIntArray.length % 2 === 1) {
-      hexOrIntArray += '0';
+      rawHex = '0' + hexOrIntArray;
     }
     return new Buffer(hexOrIntArray, 'hex');
   }
   if (Array.isArray(hexOrIntArray)) {
+    for (let i = 0; i < len - hexOrIntArray.length; i++) {
+      hexOrIntArray.splice(0, 0, 0);
+    }
     return new Buffer(hexOrIntArray);
   }
   return new Buffer(0);
@@ -288,7 +297,7 @@ function writeDataFunc(characteristics) {
     } else if (uuid === CHR_INTERVAL_UUID) {
       val = parseInt(val);
       if (val > 0) {
-        findChr(CHR_INTERVAL_UUID, characteristics).write(valToBuffer(val), true);
+        findChr(CHR_INTERVAL_UUID, characteristics).write(valToBuffer(val, 2), true);
       }
     } else if (uuid === CHR_DOUT_UUID) {
       if (val && typeof val === 'object') {

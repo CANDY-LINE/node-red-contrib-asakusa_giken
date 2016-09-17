@@ -114,6 +114,28 @@ describe('bleio module', () => {
   afterEach(() => {
     sandbox = sandbox.restore();
   });
+  describe('valToBuffer()', () => {
+    it('should translate a numeric number into a buffer', () => {
+      assert.deepEqual(new Buffer([0x0A]), bleio.valToBuffer(10));
+      assert.deepEqual(new Buffer([0x00, 0x0A]), bleio.valToBuffer(10, 2));
+      assert.deepEqual(new Buffer([0x01, 0xF4]), bleio.valToBuffer(500));
+      assert.deepEqual(new Buffer([0x01, 0xF4]), bleio.valToBuffer(500, 2));
+      assert.deepEqual(new Buffer([0x10]), bleio.valToBuffer(16));
+      assert.deepEqual(new Buffer([0x00, 0x10]), bleio.valToBuffer(16, 2));
+    });
+    it('should translate a hex number into a buffer', () => {
+      assert.deepEqual(new Buffer([0x0A]), bleio.valToBuffer('a'));
+      assert.deepEqual(new Buffer([0x00, 0x0A]), bleio.valToBuffer('a', 2));
+      assert.deepEqual(new Buffer([0x10]), bleio.valToBuffer('10'));
+      assert.deepEqual(new Buffer([0x00, 0x10]), bleio.valToBuffer('10', 2));
+    });
+    it('should translate an int array into a buffer', () => {
+      assert.deepEqual(new Buffer([0x0A]), bleio.valToBuffer([10]));
+      assert.deepEqual(new Buffer([0x00, 0x0A]), bleio.valToBuffer([10], 2));
+      assert.deepEqual(new Buffer([0x10]), bleio.valToBuffer([16]));
+      assert.deepEqual(new Buffer([0x00, 0x10]), bleio.valToBuffer([16], 2));
+    });
+  });
   describe('acceptFunc()', () => {
     it('should return true if localName starts with BLEIo_ and its length is 7', () => {
       assert.isTrue(bleio.acceptFunc('BLEIo_0'));
