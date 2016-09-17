@@ -49,6 +49,9 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* 2.0.4
+    - Fix an issue where BLEIo node failed to write a valid value because of wrong value translation
+
 * 2.0.3
     - Fix an issue where blecast module threw undefined error
 
