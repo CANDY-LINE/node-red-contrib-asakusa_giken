@@ -30,11 +30,11 @@ describe('blecast module', () => {
       test: true
     });
     testNode = sandbox.stub({
+      send: () => {},
       on: () => {},
       emit: () => {},
       in: false,
       blecastTmNode: {
-        send: () => {},
         localName: 'BLECAST_TM',
         address: 'address123'
       },
@@ -53,7 +53,7 @@ describe('blecast module', () => {
       blecast.registerIn(testNode, 'BLECAST_TM', 'address123', 'uuid123',
         () => { return {}; }, false, RED);
       console.log('<<<<discoverFunc=========================================');
-      RED.nodes.getNode.returns(testNode.blecastTmNode);
+      RED.nodes.getNode.returns(testNode);
       assert.isTrue(blecast.discoverFunc('BLECAST_TM', testPeripheral, RED));
       console.log('>>>>discoverFunc=========================================');
       done();
