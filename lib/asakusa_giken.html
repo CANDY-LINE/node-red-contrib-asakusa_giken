@@ -102,13 +102,6 @@
     </label>
     <input type='text' id='node-config-input-address' data-i18n='[placeholder]asakusa_giken.placeholder.optionalAddress'>
   </div>
-  <div class='form-row'>
-    <label for='node-config-input-uuid'>
-      <i class='fa fa-random'></i>
-      <span data-i18n='asakusa_giken.label.uuid'></span>
-    </label>
-    <input type='text' id='node-config-input-uuid' data-i18n='[placeholder]asakusa_giken.placeholder.uuid'>
-  </div>
   <div class="form-row node-config-input-initInterval">
     <label for="node-input-initInterval">
       <i class="fa fa-edit"></i>
@@ -233,7 +226,6 @@
     defaults: {
       localName: { value: '', required: true },
       address: { value: '', required: false },
-      uuid: { value: '', required: false },
       initInterval: { value: '500', required: true },
       initDout1: { value: false },
       initDout2: { value: false },
@@ -287,12 +279,6 @@
         var text = $(this).val();
         if (text && typeof(text) === 'string') {
           $(this).val(text.toLowerCase().replace(new RegExp('-', 'g'), ':').trim());
-        }
-      });
-      $('#node-config-input-uuid').blur(function() {
-        var text = $(this).val();
-        if (text && typeof(text) === 'string') {
-          $(this).val(text.toLowerCase().trim());
         }
       });
     }

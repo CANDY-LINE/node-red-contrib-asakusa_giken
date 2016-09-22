@@ -20,7 +20,6 @@ export default function(RED) {
         RED.nodes.createNode(this, n);
         this.localName = n.localName;
         this.address = n.address; // can be empty
-        this.uuid = n.uuid; // can be empty
         this.initInterval = n.initInterval;
         this.initDout = {};
         for (let i = 1; i <= 8; i++) {
