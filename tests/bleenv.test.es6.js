@@ -4,13 +4,13 @@ import 'source-map-support/register';
 import * as sinon from 'sinon';
 import { assert } from 'chai';
 import RED from 'node-red';
-import * as blecast from '../lib/blecast';
+import * as bleenv from '../lib/bleenv';
 
 let server = sinon.spy();
 let settings = sinon.spy();
 RED.init(server, settings);
 
-describe('blecast module', () => {
+describe('bleenv module', () => {
   RED.debug = true;
   let sandbox;
   let testPeripheral;
@@ -26,16 +26,17 @@ describe('blecast module', () => {
       terminate: () => {},
       address: 'address123',
       uuid: 'uuid123',
-      advertisement: {},
+      advertisement: {
+        manufacturerData: [0, 1, 2, 3, 4, 5, 6] // 7 bytes
+      },
       test: true
     });
     testNode = sandbox.stub({
       send: () => {},
       on: () => {},
       emit: () => {},
-      in: false,
-      blecastTmNode: {
-        localName: 'BLECAST_TM',
+      bleenvNode: {
+        localName: 'ENV_0',
         address: 'address123'
       },
       id: '1111'
@@ -48,23 +49,21 @@ describe('blecast module', () => {
   afterEach(() => {
     sandbox = sandbox.restore();
   });
-  describe('regisetrIn', () => {
+  describe('regisetr', () => {
     it('should register a node to peripheralsIn[category]', done => {
-      blecast.registerIn(testNode, 'BLECAST_TM', 'address123', 'uuid123',
-        () => { return {}; }, false, RED);
+      bleenv.register(testNode, RED);
       console.log('<<<<discoverFunc=========================================');
-      RED.nodes.getNode.returns(testNode);
-      assert.isTrue(blecast.discoverFunc('BLECAST_TM', testPeripheral, RED));
+      assert.isTrue(bleenv.discoverFunc('ENV_0', testPeripheral, RED));
+      assert.isTrue(testNode.send.called);
       console.log('>>>>discoverFunc=========================================');
       done();
     });
   });
-  describe('removeIn', () => {
+  describe('remove', () => {
     it('should remove the node from peripheralsIn[category]', done => {
-      blecast.registerIn({id:1}, 'BLECAST_TM', 'address1', 'uuid1',
-        () => {}, false, RED);
-      assert.isTrue(blecast.removeIn({id:1}, 'BLECAST_TM', 'address1', 'uuid1', RED));
-      assert.isFalse(blecast.removeIn({id:1}, 'BLECAST_TM', 'address1', 'uuid1', RED));
+      bleenv.register(testNode, RED);
+      assert.isTrue(bleenv.remove(testNode, RED));
+      assert.isFalse(bleenv.remove(testNode, RED));
       done();
     });
   });

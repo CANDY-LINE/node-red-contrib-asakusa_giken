@@ -200,7 +200,7 @@ export function acceptFunc(localName) {
 }
 
 export function discoverFunc(localName, peripheral, RED) {
-  if (CONN_DEBUG) { RED.log.info(`[CONN_DEBUG] (discoverFunc) [${localName}:${peripheral.address}] ${peripheral.state}`); }
+  if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (discoverFunc) [${localName}:${peripheral.address}] ${peripheral.state}`); }
   if (!bleioPeripherals[localName]) {
     bleioPeripherals[localName] = [];
   }
@@ -339,10 +339,10 @@ function readDataFunc(characteristics) {
 function setupPeripheral(peripheral, RED) {
   if (peripheral.instrumented) {
     if (peripheral.state !== 'connected') {
-      if (CONN_DEBUG) { RED.log.info(`[CONN_DEBUG] (setupPeripheral:instrumented) connect() => peripheral.terminated ${peripheral.terminated ? 'Yes' : 'No'}`); }
+      if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (setupPeripheral:instrumented) connect() => peripheral.terminated ${peripheral.terminated ? 'Yes' : 'No'}`); }
       peripheral.connect();
     } else {
-      if (CONN_DEBUG) { RED.log.info(`[CONN_DEBUG] (setupPeripheral:instrumented) disconnect() => peripheral.terminated ${peripheral.terminated ? 'Yes' : 'No'}`); }
+      if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (setupPeripheral:instrumented) disconnect() => peripheral.terminated ${peripheral.terminated ? 'Yes' : 'No'}`); }
       peripheral.disconnect(); // will re-connect
     }
     return peripheral.terminated;
@@ -352,7 +352,7 @@ function setupPeripheral(peripheral, RED) {
       RED.log.error(`[BLEIo:connect] err=${err}`);
       return;
     }
-    if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (connectHandler) connected!'); }
+    if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (connectHandler) connected!`); }
     if (peripheral && peripheral.nodes) {
       peripheral.nodes.forEach((node) => {
         node.emit('opened');
@@ -401,8 +401,7 @@ function setupPeripheral(peripheral, RED) {
                         val: UUID_VAL_PARSER[uuid](data),
                         tstamp: now,
                         rssi: peripheral.rssi,
-                        address: peripheral.address,
-                        uuid: peripheral.uuid
+                        address: peripheral.address
                       }
                     });
                   }
@@ -482,9 +481,9 @@ function setupPeripheral(peripheral, RED) {
       });
     }
     if (peripheral.terminated) {
-      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (disconnectHandler) terminated!'); }
+      if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (disconnectHandler) terminated!`); }
     } else {
-      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (disconnectHandler) re-connect()'); }
+      if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (disconnectHandler) re-connect()`); }
       peripheral.connect();
     }
     // Mark disconnect event done
@@ -498,7 +497,7 @@ function setupPeripheral(peripheral, RED) {
     peripheral.removeListener('connect', connectHandler);
     peripheral.removeListener('disconnect', disconnectHandler);
     if (peripheral.state !== 'disconnected') {
-      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (terminate) disconnect()'); }
+      if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (terminate) disconnect()`); }
       peripheral.disconnect((err) => {
         disconnectHandler(err);
         ble.stop(RED);
@@ -509,14 +508,14 @@ function setupPeripheral(peripheral, RED) {
   peripheral.instrumented = true;
   peripheral.terminated = false;
   if (peripheral.state !== 'connected') {
-    if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (setupPeripheral) connect()'); }
+    if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (setupPeripheral) connect()`); }
     peripheral.connect();
   }
   return false;
 }
 
 function startAssociationTask(RED) {
-  if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (startAssociationTask) start'); }
+  if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (startAssociationTask) start`); }
   let retry = false;
   let unassociated = [];
   let associated = [];
@@ -567,14 +566,14 @@ function startAssociationTask(RED) {
       }
       return false;
     }).forEach(peripheral => {
-      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (startAssociationTask) setupPeripheral()'); }
+      if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (startAssociationTask) setupPeripheral()`); }
       retry = setupPeripheral(peripheral, RED);
-      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (startAssociationTask) setupPeripheral() done: retry=' + retry); }
+      if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (startAssociationTask) setupPeripheral() done: retry=${retry}`); }
     });
   });
   if (unassociated.length > 0 && (associated.length !== unassociated.length)) {
     retry = true;
-    if (CONN_DEBUG) { RED.log.info(`[CONN_DEBUG] (startAssociationTask) unassociated=${unassociated}, associated=${associated}`); }
+    if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (startAssociationTask) unassociated=${unassociated}, associated=${associated}`); }
   }
   if (associationTask) {
     clearTimeout(associationTask);
@@ -585,11 +584,11 @@ function startAssociationTask(RED) {
       startAssociationTask(RED);
     }, 1000);
   }
-  if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (startAssociationTask) end (retry=' + retry + ')'); }
+  if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (startAssociationTask) end (retry=${retry})`); }
 }
 
 export function register(node, RED) {
-  if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (register) start'); }
+  if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (register) start`); }
   if (!node || !node.bleioNode) {
     throw new Error('invalid node');
   }
@@ -610,7 +609,7 @@ export function register(node, RED) {
   if (!associationTask) {
     startAssociationTask(RED);
   }
-  if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (register) end'); }
+  if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (register) end`); }
 }
 
 export function remove(node, RED) {
@@ -639,10 +638,10 @@ export function remove(node, RED) {
     delete periphNodes[address][node.id].peripheral;
     delete periphNodes[address][node.id];
     if (Object.keys(periphNodes[address]).length === 0) {
-      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (remove) terminate()'); }
+      if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (remove) terminate()`); }
       peripheral.terminate();
     } else {
-      if (CONN_DEBUG) { RED.log.info('[CONN_DEBUG] (remove) disconnect()'); }
+      if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (remove) disconnect()`); }
       peripheral.disconnect() // will re-connect
     }
   }

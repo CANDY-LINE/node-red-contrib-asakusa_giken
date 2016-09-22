@@ -1,3 +1,109 @@
+<!-- BLEEnv in -->
+<script type='text/x-red' data-template-name='BLEEnv in'>
+  <div class='form-row'>
+    <label for='node-input-name'>
+      <i class='fa fa-tag'></i>
+      <span data-i18n='node-red:common.label.name'></span>
+    </label>
+    <input type='text' id='node-input-name' data-i18n='[placeholder]node-red:common.label.name'>
+  </div>
+  <div class="form-row node-input-bleenv">
+    <label for="node-input-bleenv">
+      <i class="fa fa-random"></i>
+      <span data-i18n="asakusa_giken.label.bleenv"></span></label>
+    <input type="text" id="node-input-bleenv">
+  </div>
+  <div class="form-row" id="node-useString">
+    <label>&nbsp;</label>
+    <input type="checkbox" id="node-input-useString" style="display: inline-block; width: auto; vertical-align: top;">
+    <label for="node-input-useString" style="width: 70%;" data-i18n="asakusa_giken.label.useString"></label>
+  </div>
+</script>
+
+<script type='text/javascript'>
+  RED.nodes.registerType('BLEEnv in',{
+    category: 'input',
+    defaults: {
+      name: { name: '' },
+      bleenv: { type: 'BLEEnv', required: true },
+      useString: { value: false, required: false }
+    },
+    color: 'YellowGreen',
+    inputs: 0,
+    outputs: 1,
+    icon: "white-globe.png",
+    label: function() {
+      return this.name || 'BLEEnv';
+    },
+    labelStyle: function() {
+      return this.name ? 'node_label_italic' : '';
+    }
+  });
+</script>
+
+<!-- BLEEnv -->
+<script type='text/x-red' data-template-name='BLEEnv'>
+  <div class='form-row'>
+    <label for='node-config-input-localName'>
+      <i class='fa fa-tag'></i>
+      <span data-i18n='asakusa_giken.label.localName'></span>
+    </label>
+    <select type='text' id='node-config-input-localName' style='width: 30%;'>
+    </select>
+  </div>
+  <div class='form-row'>
+    <label for='node-config-input-address'>
+      <i class='fa fa-random'></i>
+      <span data-i18n='asakusa_giken.label.address'></span>
+    </label>
+    <input type='text' id='node-config-input-address' data-i18n='[placeholder]asakusa_giken.placeholder.optionalAddress'>
+  </div>
+</script>
+
+<script type='text/javascript'>
+  'use strict';
+  RED.nodes.registerType('BLEEnv',{
+    category: 'config',
+    defaults: {
+      localName: { value: '', required: true },
+      address: { value: '', required: false },
+    },
+    label: function() {
+      return this.localName;
+    },
+    oneditprepare: function() {
+      var localNames = [];
+      var i;
+      for (i = 0; i < 16; i++) {
+        var n = 'ENV_' + i.toString(16).toUpperCase();
+        localNames.push(n);
+      }
+      var that = this;
+      RED.nodes.eachConfig(function(c) {
+        if (c.type === 'BLEEnv' && that.id !== c.id &&
+            localNames.indexOf(c.localName) >= 0) {
+          localNames.splice(localNames.indexOf(c.localName), 1);
+        }
+      });
+      $('#node-config-input-localName').append(option);
+      $('#node-config-input-localName').val(this.localName);
+      for (i = 0; i < localNames.length; i++) {
+        var localName = localNames[i];
+        var option = $('<option></option>').attr('value', localName)
+          .text(localName);
+        $('#node-config-input-localName').append(option);
+      }
+      $('#node-config-input-address').blur(function() {
+        var text = $(this).val();
+        if (text && typeof(text) === 'string') {
+          $(this).val(text.toLowerCase().replace(new RegExp('-', 'g'), ':').trim());
+        }
+      });
+    }
+  });
+</script>
+
+
 <!-- BLEIo in -->
 <script type='text/x-red' data-template-name='BLEIo in'>
   <div class='form-row'>
@@ -101,13 +207,6 @@
       <span data-i18n='asakusa_giken.label.address'></span>
     </label>
     <input type='text' id='node-config-input-address' data-i18n='[placeholder]asakusa_giken.placeholder.optionalAddress'>
-  </div>
-  <div class='form-row'>
-    <label for='node-config-input-uuid'>
-      <i class='fa fa-random'></i>
-      <span data-i18n='asakusa_giken.label.uuid'></span>
-    </label>
-    <input type='text' id='node-config-input-uuid' data-i18n='[placeholder]asakusa_giken.placeholder.uuid'>
   </div>
   <div class="form-row node-config-input-initInterval">
     <label for="node-input-initInterval">
@@ -233,7 +332,6 @@
     defaults: {
       localName: { value: '', required: true },
       address: { value: '', required: false },
-      uuid: { value: '', required: false },
       initInterval: { value: '500', required: true },
       initDout1: { value: false },
       initDout2: { value: false },
@@ -283,16 +381,11 @@
           .text(localName);
         $('#node-config-input-localName').append(option);
       }
+      $('#node-config-input-localName').val(this.localName);
       $('#node-config-input-address').blur(function() {
         var text = $(this).val();
         if (text && typeof(text) === 'string') {
           $(this).val(text.toLowerCase().replace(new RegExp('-', 'g'), ':').trim());
-        }
-      });
-      $('#node-config-input-uuid').blur(function() {
-        var text = $(this).val();
-        if (text && typeof(text) === 'string') {
-          $(this).val(text.toLowerCase().trim());
         }
       });
     }
