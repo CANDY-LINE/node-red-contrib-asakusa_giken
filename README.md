@@ -11,6 +11,7 @@ This project offers the following BLE device nodes manufactured by Asakusa Giken
 1. [BLECAST_TM](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%2FBLECAST_TM.html) ... A BLE temperature sensor device
 1. [BLECAST_BL](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%2FBLECAST_BL.html) ... A BLE illuminance sensor device
 1. [BLEIo](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%2FBLEIo.html) ... GPIO BLE board
+1. [BLECAST_ENV](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%BLECAST_ENV.html) ... A BLE multi-sensor device (temperature, humidity and illuminance)
 
 浅草ギ研 BLECAST Node-RED ノード
 ===
@@ -20,6 +21,7 @@ This project offers the following BLE device nodes manufactured by Asakusa Giken
 1. [BLECAST_TM](http://www.robotsfx.com/robot/BLECAST_TM.html) ... BLE 温度センサー
 1. [BLECAST_BL](http://www.robotsfx.com/robot/BLECAST_BL.html) ... BLE 照度センサー
 1. [BLEIo](http://www.robotsfx.com/robot/BLEIo.html) ... 汎用I/O BLEモジュール
+1. [BLECAST_ENV](http://www.robotsfx.com/robot/BLECAST_ENV.html) ... BLE温湿度＆照度センサー
 
 ## サンプルフロー
 
@@ -49,6 +51,9 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* 3.0.0
+    - Add a new node for BLECAST_ENV
+
 * 2.0.4
     - Fix an issue where BLEIo node failed to write a valid value because of wrong value translation
 

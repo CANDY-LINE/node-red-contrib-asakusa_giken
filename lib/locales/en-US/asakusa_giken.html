@@ -1,6 +1,6 @@
 <script type="text/x-red" data-help-name="BLEEnv in">
-   <p>Input node for BLE Environmental Sensor Module</p>
-   <p>The node emits temperature in Celcius, humidity in %, and illuminance in lux notified by the BLECAST_ENV device.</p>
+   <p>Input node for BLE multi-Sensor device</p>
+   <p>The node emits temperature in °C, humidity in %, and illuminance in lux notified by the BLECAST_ENV device.</p>
    <p>The <code>msg.payload</code> format is as follows.</p>
 <table>
   <tr>
@@ -9,7 +9,7 @@
   </tr>
   <tr>
     <th>te</th>
-    <td>temperature sensor value in Celcius</td>
+    <td>temperature sensor value in °C</td>
   </tr>
   <tr>
     <th>lx</th>
@@ -35,8 +35,7 @@
   "lx":277,
   "tstamp":1448259848905,
   "rssi":-59,
-  "address":"aa:bb:cc:99:99:99",
-  "uuid":"e23520e001714e99b8afc51fcee28b35"
+  "address":"aa:bb:cc:99:99:99"
 }</pre>
     </p>
 </script>
@@ -93,8 +92,7 @@
   },
   "tstamp": 1473079281706,
   "rssi": -65,
-  "address": "c0:96:99:99:99:99",
-  "uuid": "b6f6a2d79b7145ba835b1e2b99999999"
+  "address": "c0:96:99:99:99:99"
 }</pre>
     </p>
 </script>
@@ -194,7 +192,7 @@
   </tr>
   <tr>
     <th>unit</th>
-    <td>The unit of the temperature value. <code>C</code> for Celcius</td>
+    <td>The unit of the temperature value. <code>C</code> for °C</td>
   </tr>
   <tr>
     <th>val</th>
