@@ -1,3 +1,46 @@
+<script type="text/x-red" data-help-name="BLEEnv in">
+   <p>Input node for BLE Environmental Sensor Module</p>
+   <p>The node emits temperature in Celcius, humidity in %, and illuminance in lux notified by the BLECAST_ENV device.</p>
+   <p>The <code>msg.payload</code> format is as follows.</p>
+<table>
+  <tr>
+    <th>hu</th>
+    <td>humidity sensor value in %</td>
+  </tr>
+  <tr>
+    <th>te</th>
+    <td>temperature sensor value in Celcius</td>
+  </tr>
+  <tr>
+    <th>lx</th>
+    <td>illuminance sensor value in lux</td>
+  </tr>
+  <tr>
+    <th>tstamp</th>
+    <td>Epoch time in milliseconds</td>
+  </tr>
+  <tr>
+    <th>rssi</th>
+    <td>The signal strength in dBm</td>
+  </tr>
+  <tr>
+    <th>address</th>
+    <td>The BLE address</td>
+  </tr>
+</table>
+   <p>The typical JSON payload is shown as below.
+<pre>{
+  "hu":83.95437622070312,
+  "te":24.24667236328124,
+  "lx":277,
+  "tstamp":1448259848905,
+  "rssi":-59,
+  "address":"aa:bb:cc:99:99:99",
+  "uuid":"e23520e001714e99b8afc51fcee28b35"
+}</pre>
+    </p>
+</script>
+
 <script type="text/x-red" data-help-name="BLEIo in">
    <p>Input node for GPIO BLE Module</p>
    <p>The node emits <code>AIN</code> and <code>DIN</code> values notified by the BLEIo device.</p>

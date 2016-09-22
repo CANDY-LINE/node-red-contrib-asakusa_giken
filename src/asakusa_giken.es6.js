@@ -9,9 +9,42 @@ import * as blecast from './blecast';
 import * as blecastBl from './blecast_bl';
 import * as blecastTm from './blecast_tm';
 import * as bleio from './bleio';
+import * as bleenv from './bleenv';
 
 export default function(RED) {
   let p = ble.start(RED).then(() => {
+
+    // BLECAST_ENV
+    ble.registerDiscoverHandler(bleenv.acceptFunc, bleenv.discoverFunc);
+    class BLEEnvNode {
+      constructor(n) {
+        RED.nodes.createNode(this, n);
+        this.localName = n.localName;
+        this.address = n.address; // can be empty
+      }
+    }
+    RED.nodes.registerType('BLEEnv', BLEEnvNode);
+
+    class BLEEnvInNode {
+      constructor(n) {
+        RED.nodes.createNode(this, n);
+        this.useString = n.useString;
+        this.bleenvNodeId = n.bleenv;
+        this.bleenvNode = RED.nodes.getNode(this.bleenvNodeId);
+        if (this.bleenvNode) {
+          bleenv.register(this, RED);
+        }
+        this.name = n.name;
+
+        this.on('close', () => {
+          if (this.bleenvNode) {
+            bleenv.remove(this, RED);
+          }
+        });
+        bleenv.clear(RED);
+      }
+    }
+    RED.nodes.registerType('BLEEnv in', BLEEnvInNode);
 
     // BLEIo
     ble.registerDiscoverHandler(bleio.acceptFunc, bleio.discoverFunc);
