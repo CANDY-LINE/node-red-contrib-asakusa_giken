@@ -401,8 +401,7 @@ function setupPeripheral(peripheral, RED) {
                         val: UUID_VAL_PARSER[uuid](data),
                         tstamp: now,
                         rssi: peripheral.rssi,
-                        address: peripheral.address,
-                        uuid: peripheral.uuid
+                        address: peripheral.address
                       }
                     });
                   }
