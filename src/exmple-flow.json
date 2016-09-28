@@ -264,7 +264,7 @@
     },
     {
         "id": "16cedfb8.3031b8",
-        "type": "BLEEnv in",
+        "type": "BLECAST_ENV in",
         "z": "2bb37a8a.bca9ae",
         "name": "",
         "bleenv": "6d4ae5ec.13dc3c",
@@ -313,7 +313,7 @@
     },
     {
         "id": "6d4ae5ec.13dc3c",
-        "type": "BLEEnv",
+        "type": "BLECAST_ENV",
         "z": "2bb37a8a.bca9ae",
         "localName": "ENV_0",
         "address": ""

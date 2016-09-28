@@ -1,5 +1,5 @@
-<!-- BLEEnv in -->
-<script type='text/x-red' data-template-name='BLEEnv in'>
+<!-- BLECAST_ENV in -->
+<script type='text/x-red' data-template-name='BLECAST_ENV in'>
   <div class='form-row'>
     <label for='node-input-name'>
       <i class='fa fa-tag'></i>
@@ -21,11 +21,11 @@
 </script>
 
 <script type='text/javascript'>
-  RED.nodes.registerType('BLEEnv in',{
+  RED.nodes.registerType('BLECAST_ENV in',{
     category: 'input',
     defaults: {
       name: { name: '' },
-      bleenv: { type: 'BLEEnv', required: true },
+      bleenv: { type: 'BLECAST_ENV', required: true },
       useString: { value: false, required: false }
     },
     color: 'YellowGreen',
@@ -33,7 +33,7 @@
     outputs: 1,
     icon: "white-globe.png",
     label: function() {
-      return this.name || 'BLEEnv';
+      return this.name || 'BLECAST_ENV';
     },
     labelStyle: function() {
       return this.name ? 'node_label_italic' : '';
@@ -41,8 +41,8 @@
   });
 </script>
 
-<!-- BLEEnv -->
-<script type='text/x-red' data-template-name='BLEEnv'>
+<!-- BLECAST_ENV -->
+<script type='text/x-red' data-template-name='BLECAST_ENV'>
   <div class='form-row'>
     <label for='node-config-input-localName'>
       <i class='fa fa-tag'></i>
@@ -62,7 +62,7 @@
 
 <script type='text/javascript'>
   'use strict';
-  RED.nodes.registerType('BLEEnv',{
+  RED.nodes.registerType('BLECAST_ENV',{
     category: 'config',
     defaults: {
       localName: { value: '', required: true },
@@ -80,7 +80,7 @@
       }
       var that = this;
       RED.nodes.eachConfig(function(c) {
-        if (c.type === 'BLEEnv' && that.id !== c.id &&
+        if (c.type === 'BLECAST_ENV' && that.id !== c.id &&
             localNames.indexOf(c.localName) >= 0) {
           localNames.splice(localNames.indexOf(c.localName), 1);
         }
