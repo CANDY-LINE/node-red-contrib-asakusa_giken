@@ -88,6 +88,7 @@ export function start(RED) {
     if (isScanning) {
       return resolve();
     }
+    noble.removeAllListeners('stateChange');
     noble.on('stateChange', state => {
       if (state === 'poweredOn') {
         if (!isScanning) {
