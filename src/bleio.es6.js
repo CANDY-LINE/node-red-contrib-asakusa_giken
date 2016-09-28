@@ -262,7 +262,7 @@ export function valToBuffer(hexOrIntArray, len=1) {
 
 function strToBuffer(str) {
   if (!str) {
-    return new Buffer(16);
+    return Buffer.alloc(16, 0x20);
   }
   let i;
   let buf = [];
@@ -273,7 +273,7 @@ function strToBuffer(str) {
     }
   }
   for (i = buf.length; i < 16; i++) {
-    buf.push(0);
+    buf.push(0x20);
   }
   return new Buffer(buf);
 }
@@ -311,7 +311,7 @@ function writeDataFunc(characteristics) {
       } else {
         val = parseInt(val) & 0xFF;
       }
-      if (val > 0) {
+      if (val >= 0) {
         findChr(CHR_DOUT_UUID, characteristics).write(valToBuffer(val), true);
       }
     } else if (uuid === CHR_PWM_UUID) {
@@ -323,8 +323,8 @@ function writeDataFunc(characteristics) {
       } else {
         val = parseInt(val) & 0xFFFFFF;
       }
-      if (val > 0) {
-        findChr(CHR_PWM_UUID, characteristics).write(valToBuffer(val), true);
+      if (val >= 0) {
+        findChr(CHR_PWM_UUID, characteristics).write(valToBuffer(val, 3), true);
       }
     }
   };
