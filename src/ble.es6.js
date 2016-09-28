@@ -114,6 +114,7 @@ export function start(RED) {
         return resolve();
       }
       isMonitoring = true;
+      noble.removeAllListeners('discover');
       noble.on('discover', discoverFuncFactory(RED));
       resolve();
       RED.log.info(RED._('asakusa_giken.message.setup-done'));
