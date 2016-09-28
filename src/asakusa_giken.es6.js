@@ -23,7 +23,7 @@ export default function(RED) {
         this.address = n.address; // can be empty
       }
     }
-    RED.nodes.registerType('BLEEnv', BLEEnvNode);
+    RED.nodes.registerType('BLECAST_ENV', BLEEnvNode);
 
     class BLEEnvInNode {
       constructor(n) {
@@ -44,7 +44,7 @@ export default function(RED) {
         bleenv.clear(RED);
       }
     }
-    RED.nodes.registerType('BLEEnv in', BLEEnvInNode);
+    RED.nodes.registerType('BLECAST_ENV in', BLEEnvInNode);
 
     // BLEIo
     ble.registerDiscoverHandler(bleio.acceptFunc, bleio.discoverFunc);
