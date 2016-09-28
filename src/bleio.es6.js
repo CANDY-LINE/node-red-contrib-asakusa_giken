@@ -262,7 +262,7 @@ export function valToBuffer(hexOrIntArray, len=1) {
 
 function strToBuffer(str) {
   if (!str) {
-    return new Buffer(16);
+    return Buffer.alloc(16, 0x20);
   }
   let i;
   let buf = [];
@@ -273,7 +273,7 @@ function strToBuffer(str) {
     }
   }
   for (i = buf.length; i < 16; i++) {
-    buf.push(0);
+    buf.push(0x20);
   }
   return new Buffer(buf);
 }
