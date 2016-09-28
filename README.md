@@ -51,6 +51,11 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* 3.0.1
+    - Fix an issue where LCD showed dot characters as blank spaces
+    - Fix an issue where some of DOUT and PWM values weren't applied properly
+    - Improve the example flow
+
 * 3.0.0
     - Add a new node for BLECAST_ENV
 
