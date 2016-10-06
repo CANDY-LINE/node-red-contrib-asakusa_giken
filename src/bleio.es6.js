@@ -155,7 +155,7 @@ UUID_VAL_PARSER[CHR_PWM_UUID] = (raw) => {
   return raw;
 };
 
-/*
+/* local name - visual nodes mappings
  * {
  *   "local name(BLEIo_0 to BLEIo_F)": {
  *     "MAC address or *(wildcard)" : {
@@ -166,7 +166,7 @@ UUID_VAL_PARSER[CHR_PWM_UUID] = (raw) => {
  */
 const bleioNodes = {};
 
-/*
+/* local name - peripherals mappings
  * {
  *   "local name(BLEIo_0 to BLEIo_F)": [{peripheral object},...], ...
  * }
