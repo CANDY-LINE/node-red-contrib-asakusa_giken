@@ -429,6 +429,7 @@ function setupPeripheral(peripheral, RED) {
             if (node.in) {
               return;
             }
+            node.removeAllListeners('input');
             node.on('input', (msg) => {
               let values = msg.payload;
               if (!values) {
@@ -468,13 +469,6 @@ function setupPeripheral(peripheral, RED) {
       }
       return;
     }
-    Object.keys(bleioPeripherals).forEach((localName) => {
-      let ary = bleioPeripherals[localName];
-      let i = ary.indexOf(peripheral);
-      if (i >= 0) {
-        ary.splice(i, 1);
-      }
-    });
     if (peripheral && peripheral.nodes) {
       peripheral.nodes.forEach((node) => {
         node.emit('closed');
@@ -482,16 +476,25 @@ function setupPeripheral(peripheral, RED) {
     }
     if (peripheral.terminated) {
       if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (disconnectHandler) terminated!`); }
+      // Unassociate the peripheral with localName
+      Object.keys(bleioPeripherals).forEach((localName) => {
+        let ary = bleioPeripherals[localName];
+        let i = ary.indexOf(peripheral);
+        if (i >= 0) {
+          ary.splice(i, 1);
+        }
+      });
+      // Mark disconnect event done
+      peripheral.instrumented = false;
     } else {
       if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (disconnectHandler) re-connect()`); }
       peripheral.connect();
     }
-    // Mark disconnect event done
-    peripheral.instrumented = false;
   };
   peripheral.on('connect', connectHandler);
   peripheral.on('disconnect', disconnectHandler);
   peripheral.terminate = () => {
+    if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (terminate) start terminate!!`); }
     peripheral.instrumented = false;
     peripheral.terminated = true;
     peripheral.removeListener('connect', connectHandler);
@@ -524,6 +527,7 @@ function startAssociationTask(RED) {
     let nodes = bleioNodes[localName];
     if (!periphs || periphs.length === 0) {
       if (nodes && Object.keys(nodes).length > 0) {
+        if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (startAssociationTask) No peripherals for ${localName} (will retry)`); }
         retry = true;
         Object.keys(nodes).forEach((address) => {
           Object.keys(nodes[address]).forEach((nodeId) => {
@@ -606,9 +610,10 @@ export function register(node, RED) {
     periphNodes[address] = {};
   }
   periphNodes[address][node.id] = node;
-  if (!associationTask) {
-    startAssociationTask(RED);
+  if (associationTask) {
+    clearTimeout(associationTask);
   }
+  startAssociationTask(RED);
   if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (register) end`); }
 }
 
