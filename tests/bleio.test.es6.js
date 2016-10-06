@@ -166,6 +166,7 @@ describe('bleio module', () => {
         test: true
       });
       testNode = sandbox.stub({
+        removeAllListeners: () => {},
         send: () => {},
         on: () => {},
         emit: () => {},
@@ -187,6 +188,7 @@ describe('bleio module', () => {
         test: true
       });
       testNode2 = sandbox.stub({
+        removeAllListeners: () => {},
         send: () => {},
         on: () => {},
         emit: () => {},
@@ -293,6 +295,7 @@ describe('registration and removal without stub', () => {
     test: true
   };
   let testNode = {
+    removeAllListeners: () => {},
     on: () => {},
     emit: () => {},
     bleioNode: {
@@ -311,6 +314,7 @@ describe('registration and removal without stub', () => {
     test: true
   };
   let testNode2 = {
+    removeAllListeners: () => {},
     on: () => {},
     emit: () => {},
     bleioNode: {
