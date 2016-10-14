@@ -51,6 +51,9 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* 3.0.3
+    - Fix an issue where BLE scanning stopped after connecting to a BLE peripheral
+
 * 3.0.2
     - Fix an issue where node events weren't occasionally transmitted to configuration nodes
 
