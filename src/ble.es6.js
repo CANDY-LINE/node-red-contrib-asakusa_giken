@@ -97,6 +97,15 @@ export function start(RED) {
       if (state === 'poweredOn') {
         if (!isScanning) {
           RED.log.info(RED._('asakusa_giken.message.start-scanning'));
+          noble.on('scanStop', function () {
+            setTimeout(function () {
+              noble.startScanning([], true, (err) => {
+                if (err) {
+                  RED.log.info(RED._('asakusa_giken.errors.unknown', {error: err}));
+                }
+              });
+            }, 2500);
+          });
           noble.startScanning([], true);
           isScanning = true;
         }
