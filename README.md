@@ -51,6 +51,9 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* ?.?.?
+    - Remove Node.js v0.12 support
+
 * 3.0.4
     - Remove redundant dependency
 
