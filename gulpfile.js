@@ -22,10 +22,10 @@ gulp.task('clean', () => {
   gulp.src([
     'tests/**/*.map',
     'tests/**/*.js',
+    '!tests/**/*.es6.js',
     'lib/**/*.map',
     'lib/**/*.js',
     'lib/**/*-flow.json',
-    'lib/**/*.es6.js',
     '*.log',
     '!node_modules/**/*',
     '!Gruntfile.js',
