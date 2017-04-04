@@ -1,9 +1,8 @@
 'use strict';
 
-import Promise from 'es6-promises';
 import LRU from 'lru-cache';
 
-const TAG = '[BLECAST]'
+const TAG = '[BLECAST]';
 
 // key = categoryName, value = category store (key = address, value = array of category hanldler info)
 let peripheralsIn = {};
@@ -193,5 +192,5 @@ export function discoverFunc(categoryName, peripheral, RED) {
 }
 
 export function acceptFunc(categoryName) {
-  return (~'BLECAST_TM BLECAST_BL'.indexOf(categoryName));
+  return ('BLECAST_TM BLECAST_BL'.indexOf(categoryName) >= 0);
 }

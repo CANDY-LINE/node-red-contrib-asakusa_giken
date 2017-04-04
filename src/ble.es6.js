@@ -3,25 +3,25 @@
 import noble from 'noble';
 import Promise from 'es6-promises';
 
-let isScanning = false;
-let isMonitoring = false;
+let scanning = false;
+let monitoring = false;
 let discoverHandlers = [];
 let stateChangeHandler;
 let discoverHandler;
 
 export function isScanning() {
-  return isScanning;
+  return scanning;
 }
 
 export function isMonitoring() {
-  return isMonitoring;
+  return monitoring;
 }
 
 export function registerDiscoverHandler(acceptFunc, discoverFunc) {
   if (!acceptFunc || !discoverFunc) {
     return false;
   }
-  for (i in discoverHandlers) {
+  for (let i in discoverHandlers) {
     if (discoverHandlers[i].accept.toString() === acceptFunc.toString()) {
       return false;
     }
@@ -60,7 +60,7 @@ export function discoverFuncFactory(RED) {
  */
 export function stop(RED) {
   noble.stopScanning();
-  isScanning = false;
+  scanning = false;
   if (RED && RED._) {
     RED.log.info(RED._('asakusa_giken.message.stop-scanning'));
   }
@@ -87,7 +87,7 @@ export function start(RED) {
     }
   }
   return new Promise(resolve => {
-    if (isScanning) {
+    if (scanning) {
       return resolve();
     }
     if (stateChangeHandler) {
@@ -95,7 +95,7 @@ export function start(RED) {
     }
     stateChangeHandler = (state) => {
       if (state === 'poweredOn') {
-        if (!isScanning) {
+        if (!scanning) {
           RED.log.info(RED._('asakusa_giken.message.start-scanning'));
           noble.on('scanStop', function () {
             setTimeout(function () {
@@ -107,27 +107,27 @@ export function start(RED) {
             }, 2500);
           });
           noble.startScanning([], true);
-          isScanning = true;
+          scanning = true;
         }
       } else {
         noble.stopScanning();
-        isScanning = false;
+        scanning = false;
         RED.log.info(RED._('asakusa_giken.message.stop-scanning'));
       }
     };
     noble.on('stateChange', stateChangeHandler);
-    if (!isScanning && noble.state === 'poweredOn') {
+    if (!scanning && noble.state === 'poweredOn') {
       RED.log.info(RED._('asakusa_giken.message.start-scanning'));
       noble.startScanning([], true);
-      isScanning = true;
+      scanning = true;
     }
     resolve();
   }).then(() => {
     return new Promise(resolve => {
-      if (isMonitoring) {
+      if (monitoring) {
         return resolve();
       }
-      isMonitoring = true;
+      monitoring = true;
       if (discoverHandler) {
         noble.removeListener('discover', discoverHandler);
       }
