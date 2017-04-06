@@ -8,5 +8,6 @@ tests
 node_modules
 *.log
 Gruntfile.js
+gulpfile.js
 .travis.yml
 src

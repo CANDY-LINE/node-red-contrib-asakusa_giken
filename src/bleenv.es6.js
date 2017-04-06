@@ -1,10 +1,8 @@
 'use strict';
 
-import Promise from 'es6-promises';
 import LRU from 'lru-cache';
-import * as ble from './ble';
 
-const TAG = '[BLEENV]'
+const TAG = '[BLEENV]';
 const CONN_DEBUG = false;
 /*
  * {
@@ -108,7 +106,7 @@ export function register(node, RED) {
   if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (register) end`); }
 }
 
-export function remove(node, RED) {
+export function remove(node) {
   if (!node || !node.bleenvNode) {
     throw new Error('invalid node');
   }

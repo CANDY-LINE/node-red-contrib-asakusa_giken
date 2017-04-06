@@ -1,11 +1,11 @@
 'use strict';
+/*jshint bitwise: false*/
 
-import Promise from 'es6-promises';
 import LRU from 'lru-cache';
 import * as ble from './ble';
 
 const CONN_DEBUG = false;
-const TAG = '[BLEIo]'
+const TAG = '[BLEIo]';
 const SERVICE_UUID = 'feed0001594246d5ade581c064d03a03';
 
 const LCD_CHAR_TABLE = {
@@ -247,7 +247,7 @@ export function valToBuffer(hexOrIntArray, len=1) {
       hexOrIntArray = Array((len * 2) - hexOrIntArray.length + 1).join('0') + hexOrIntArray;
     }
     if (hexOrIntArray.length % 2 === 1) {
-      rawHex = '0' + hexOrIntArray;
+      hexOrIntArray = '0' + hexOrIntArray;
     }
     return new Buffer(hexOrIntArray, 'hex');
   }
@@ -647,7 +647,7 @@ export function remove(node, RED) {
       peripheral.terminate();
     } else {
       if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (remove) disconnect()`); }
-      peripheral.disconnect() // will re-connect
+      peripheral.disconnect(); // will re-connect
     }
   }
   return true;

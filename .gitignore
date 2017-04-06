@@ -2,9 +2,12 @@ node_modules
 *.map
 *.js
 lib/*.js
+lib/*.json
 test/*.js
 !*.es6.js
 lib/*.es6.js
 !Gruntfile.js
+!gulpfile.js
 *.tgz
 *.log
+.node-version
