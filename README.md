@@ -11,12 +11,10 @@ This project offers the following BLE device nodes manufactured by Asakusa Giken
 1. [BLEIo](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%2FBLEIo.html) ... GPIO BLE board
 1. [BLECAST_ENV](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%BLECAST_ENV.html) ... A BLE multi-sensor device (temperature, humidity and illuminance)
 
-The following nodes are disabled by default:
+The following nodes are no longer included:
 
 1. [BLECAST_TM](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%2FBLECAST_TM.html) ... A BLE temperature sensor device
 1. [BLECAST_BL](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%2FBLECAST_BL.html) ... A BLE illuminance sensor device
-
-Set `ASAKUSA_GIKEN_USE_OBSOLETE=true` to activate them.
 
 浅草ギ研 BLECAST Node-RED ノード
 ===
@@ -26,7 +24,7 @@ Set `ASAKUSA_GIKEN_USE_OBSOLETE=true` to activate them.
 1. [BLEIo](http://www.robotsfx.com/robot/BLEIo.html) ... 汎用I/O BLEモジュール
 1. [BLECAST_ENV](http://www.robotsfx.com/robot/BLECAST_ENV.html) ... BLE温湿度＆照度センサー
 
-以下のノードは、初期設定では使用できません。使用するには、環境変数「ASAKUSA_GIKEN_USE_OBSOLETE=true」を設定してください。
+以下のノードは、初期設定では使用できません。使用するには、バージョン3のノードをインストールしてください。
 
 1. [BLECAST_TM](http://www.robotsfx.com/robot/BLECAST_TM.html) ... BLE 温度センサー
 1. [BLECAST_BL](http://www.robotsfx.com/robot/BLECAST_BL.html) ... BLE 照度センサー
@@ -62,7 +60,7 @@ will generate ES5 js files.
 # Revision History
 * ?.?.?
     - Remove Node.js v0.12 support
-    - Set `ASAKUSA_GIKEN_USE_OBSOLETE=true` to use [BLECAST_TM](http://www.robotsfx.com/robot/BLECAST_TM.html) node and [BLECAST_BL](http://www.robotsfx.com/robot/BLECAST_BL.html) node
+    - Remove [BLECAST_TM](http://www.robotsfx.com/robot/BLECAST_TM.html) node and [BLECAST_BL](http://www.robotsfx.com/robot/BLECAST_BL.html) node
 
 * 3.0.4
     - Remove redundant dependency

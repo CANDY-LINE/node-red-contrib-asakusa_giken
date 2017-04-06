@@ -5,8 +5,7 @@ import * as sinon from 'sinon';
 import { assert } from 'chai';
 import RED from 'node-red';
 import asakusaGikenModule from '../lib/asakusa_giken';
-import * as ble from '../lib/ble';
-import * as blecast from '../lib/blecast';
+import * as bleenv from '../lib/bleenv';
 
 let server = sinon.spy();
 let settings = sinon.spy();
@@ -22,30 +21,20 @@ describe('asakusa_giken node', () => {
 	afterEach(() => {
 		sandbox = sandbox.restore();
 	});
-  describe('blecast module', () => {
+  describe('bleenv module', () => {
     it('should be able to clear caches', () => {
-      blecast.clear(RED);
+      bleenv.clear(RED);
     });
   });
   describe('asakusa_giken module', () => {
     it('should have valid Node-RED plugin classes', done => {
       assert.isNotNull(RED);
       asakusaGikenModule(RED).then(() => {
-        assert.isNotNull(RED.nodes.getType('BLECAST_BL').name);
-        assert.isNotNull(RED.nodes.getType('BLECAST_BL in').name);
-        assert.isNotNull(RED.nodes.getType('BLECAST_TM').name);
-        assert.isNotNull(RED.nodes.getType('BLECAST_TM in').name);
-
-        let BleCastBl = RED.nodes.getType('BLECAST_BL');
-        new BleCastBl({});
-        let BleCastBlIn = RED.nodes.getType('BLECAST_BL in');
-        new BleCastBlIn({});
-
-        let BleCastTm = RED.nodes.getType('BLECAST_TM');
-        new BleCastTm({});
-        let BleCastTmIn = RED.nodes.getType('BLECAST_TM in');
-        new BleCastTmIn({});
-        ble.stop(RED);
+        assert.isNotNull(RED.nodes.getType('BLECAST_ENV').name);
+        assert.isNotNull(RED.nodes.getType('BLECAST_ENV in').name);
+        assert.isNotNull(RED.nodes.getType('BLEIo').name);
+        assert.isNotNull(RED.nodes.getType('BLEIo in').name);
+        assert.isNotNull(RED.nodes.getType('BLEIo out').name);
         done();
       }).catch(err => {
         done(err);
