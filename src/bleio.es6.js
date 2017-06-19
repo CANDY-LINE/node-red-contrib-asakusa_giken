@@ -491,20 +491,30 @@ function setupPeripheral(peripheral, RED) {
       peripheral.connect();
     }
   };
+  if (peripheral.removeHandler) {
+    peripheral.removeHandler();
+  }
   peripheral.on('connect', connectHandler);
   peripheral.on('disconnect', disconnectHandler);
-  peripheral.terminate = () => {
+  peripheral.removeHandler = () => {
+    peripheral.removeListener('connect', connectHandler);
+    peripheral.removeListener('disconnect', disconnectHandler);
+  };
+  peripheral.terminate = (done) => {
     if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (terminate) start terminate!!`); }
     peripheral.instrumented = false;
     peripheral.terminated = true;
-    peripheral.removeListener('connect', connectHandler);
-    peripheral.removeListener('disconnect', disconnectHandler);
+    peripheral.removeHandler();
     if (peripheral.state !== 'disconnected') {
       if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (terminate) disconnect()`); }
       peripheral.disconnect((err) => {
         disconnectHandler(err);
         ble.stop(RED);
+        if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (terminate) disconnect() done!`); }
         ble.start(RED);
+        if (done) {
+          done();
+        }
       });
     }
   };
@@ -617,7 +627,7 @@ export function register(node, RED) {
   if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (register) end`); }
 }
 
-export function remove(node, RED) {
+export function remove(node, done, RED) {
   if (!node || !node.bleioNode) {
     throw new Error('invalid node');
   }
@@ -644,7 +654,7 @@ export function remove(node, RED) {
     delete periphNodes[address][node.id];
     if (Object.keys(periphNodes[address]).length === 0) {
       if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (remove) terminate()`); }
-      peripheral.terminate();
+      peripheral.terminate(done);
     } else {
       if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (remove) disconnect()`); }
       peripheral.disconnect(); // will re-connect
