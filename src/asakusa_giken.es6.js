@@ -29,9 +29,9 @@ export default function(RED) {
         }
         this.name = n.name;
 
-        this.on('close', (done) => {
+        this.on('close', () => {
           if (this.bleenvNode) {
-            bleenv.remove(this, done, RED);
+            bleenv.remove(this, RED);
           }
         });
         bleenv.clear(RED);

@@ -660,6 +660,9 @@ export function remove(node, done, RED) {
     } else {
       if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (remove) disconnect()`); }
       peripheral.disconnect(); // will re-connect
+      if (done) {
+        done();
+      }
     }
   }
   return true;
