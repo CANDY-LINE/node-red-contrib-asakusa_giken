@@ -85,14 +85,13 @@
           localNames.splice(localNames.indexOf(c.localName), 1);
         }
       });
-      $('#node-config-input-localName').append(option);
-      $('#node-config-input-localName').val(this.localName);
       for (i = 0; i < localNames.length; i++) {
         var localName = localNames[i];
         var option = $('<option></option>').attr('value', localName)
           .text(localName);
         $('#node-config-input-localName').append(option);
       }
+      $('#node-config-input-localName').val(this.localName);
       $('#node-config-input-address').blur(function() {
         var text = $(this).val();
         if (text && typeof(text) === 'string') {

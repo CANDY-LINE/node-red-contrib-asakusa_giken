@@ -29,9 +29,9 @@ export default function(RED) {
         }
         this.name = n.name;
 
-        this.on('close', () => {
+        this.on('close', (done) => {
           if (this.bleenvNode) {
-            bleenv.remove(this, RED);
+            bleenv.remove(this, done, RED);
           }
         });
         bleenv.clear(RED);
@@ -77,9 +77,9 @@ export default function(RED) {
         }
         this.name = n.name;
 
-        this.on('close', () => {
+        this.on('close', (done) => {
           if (this.bleioNode) {
-            bleio.remove(this, RED);
+            bleio.remove(this, done, RED);
           }
         });
         bleio.clear(RED);
@@ -103,9 +103,9 @@ export default function(RED) {
         }
         this.name = n.name;
 
-        this.on('close', () => {
+        this.on('close', (done) => {
           if (this.bleioNode) {
-            bleio.remove(this, RED);
+            bleio.remove(this, done, RED);
           }
         });
         bleio.clear(RED);

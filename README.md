@@ -58,6 +58,10 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* 4.0.1
+    - Fix an issue where BLE termination cannot be performed while 'close' event
+    - Fix an issue where localName cannot be resumed
+
 * 4.0.0
     - Remove Node.js v0.12 support
     - Remove [BLECAST_TM](http://www.robotsfx.com/robot/BLECAST_TM.html) node and [BLECAST_BL](http://www.robotsfx.com/robot/BLECAST_BL.html) node
