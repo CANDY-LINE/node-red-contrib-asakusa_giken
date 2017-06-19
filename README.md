@@ -58,6 +58,9 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* 4.0.2
+    - Fix an issue where done cannot be invoked when the peripheral is already disconnected
+
 * 4.0.1
     - Fix an issue where BLE termination cannot be performed while 'close' event
     - Fix an issue where localName cannot be resumed

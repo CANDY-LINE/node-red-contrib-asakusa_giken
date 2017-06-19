@@ -516,6 +516,8 @@ function setupPeripheral(peripheral, RED) {
           done();
         }
       });
+    } else if (done) {
+      done();
     }
   };
   peripheral.instrumented = true;
