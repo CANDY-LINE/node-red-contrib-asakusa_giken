@@ -58,6 +58,9 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* 4.0.3
+    - Invoke done() callback at least one associated peripheral exists
+
 * 4.0.2
     - Fix an issue where done cannot be invoked when the peripheral is already disconnected
 
