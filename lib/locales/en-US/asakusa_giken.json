@@ -1,6 +1,8 @@
 {
   "asakusa_giken" : {
     "label" : {
+      "blecastBl" : "BLE Illuminance Sensor",
+      "blecastTm" : "BLE Temperature Sensor",
       "bleio": "BLEIo Module",
       "bleenv": "BLECAST ENV Module",
       "useString" : "Use string payload",
