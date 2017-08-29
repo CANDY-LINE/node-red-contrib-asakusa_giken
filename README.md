@@ -32,7 +32,7 @@ The following nodes are no longer included:
 
 ## サンプルフロー
 
-BLEIo向けのサンプルフロー[`example-flow.json`](https://github.com/CANDY-LINE/node-red-contrib-asakusa_giken/blob/develop/src/exmple-flow.json) が利用可能です。クリックして中身を表示してから全体をコピーし、Node-REDの`Import`から`Clipboard`を選択して内容を貼り付けてください。
+BLEIo向けのサンプルフロー[`example-flow.json`](https://github.com/CANDY-LINE/node-red-contrib-asakusa_giken/blob/develop/src/example-flow.json) が利用可能です。クリックして中身を表示してから全体をコピーし、Node-REDの`Import`から`Clipboard`を選択して内容を貼り付けてください。
 
 # Install
 
