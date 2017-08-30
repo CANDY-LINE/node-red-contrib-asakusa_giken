@@ -58,6 +58,9 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* 4.0.4
+    - Fix an issue where TimeoutError can be thrown when valid BLE peripherals are missing
+
 * 4.0.3
     - Invoke done() callback at least one associated peripheral exists
 
@@ -71,6 +74,9 @@ will generate ES5 js files.
 * 4.0.0
     - Remove Node.js v0.12 support
     - Remove [BLECAST_TM](http://www.robotsfx.com/robot/BLECAST_TM.html) node and [BLECAST_BL](http://www.robotsfx.com/robot/BLECAST_BL.html) node
+
+* 3.x
+    - See 3.x branch for future 3.x releases
 
 * 3.0.4
     - Remove redundant dependency

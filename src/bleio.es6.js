@@ -670,6 +670,10 @@ export function remove(node, done, RED) {
         done();
       }
     }
+  } else {
+    if (done) {
+      done();
+    }
   }
   return true;
 }
