@@ -82,7 +82,9 @@ export default function(RED) {
 
         this.on('close', (done) => {
           if (this.bleioNode) {
-            bleio.remove(this, done, RED);
+            if (!bleio.remove(this, done, RED)) {
+              done();
+            }
           }
         });
         bleio.clear(RED);
@@ -108,7 +110,9 @@ export default function(RED) {
 
         this.on('close', (done) => {
           if (this.bleioNode) {
-            bleio.remove(this, done, RED);
+            if (!bleio.remove(this, done, RED)) {
+              done();
+            }
           }
         });
         bleio.clear(RED);
