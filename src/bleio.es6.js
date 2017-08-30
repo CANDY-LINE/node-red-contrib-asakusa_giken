@@ -629,9 +629,15 @@ export function register(node, RED) {
   if (CONN_DEBUG) { RED.log.info(`${TAG}[CONN_DEBUG] (register) end`); }
 }
 
+/* false when done() is never called */
 export function remove(node, done, RED) {
   if (!node || !node.bleioNode) {
-    throw new Error('invalid node');
+    let err = new Error('invalid node');
+    if (done) {
+      done(err);
+      return true;
+    }
+    throw err;
   }
   let localName = node.bleioNode.localName;
   if (!localName) {
@@ -663,6 +669,10 @@ export function remove(node, done, RED) {
       if (done) {
         done();
       }
+    }
+  } else {
+    if (done) {
+      done();
     }
   }
   return true;

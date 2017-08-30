@@ -32,7 +32,7 @@ The following nodes are no longer included:
 
 ## サンプルフロー
 
-BLEIo向けのサンプルフロー[`example-flow.json`](https://github.com/CANDY-LINE/node-red-contrib-asakusa_giken/blob/develop/src/exmple-flow.json) が利用可能です。クリックして中身を表示してから全体をコピーし、Node-REDの`Import`から`Clipboard`を選択して内容を貼り付けてください。
+BLEIo向けのサンプルフロー[`example-flow.json`](https://github.com/CANDY-LINE/node-red-contrib-asakusa_giken/blob/develop/src/example-flow.json) が利用可能です。クリックして中身を表示してから全体をコピーし、Node-REDの`Import`から`Clipboard`を選択して内容を貼り付けてください。
 
 # Install
 
@@ -58,6 +58,9 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* 4.0.4
+    - Fix an issue where TimeoutError can be thrown when valid BLE peripherals are missing
+
 * 4.0.3
     - Invoke done() callback at least one associated peripheral exists
 
@@ -71,6 +74,9 @@ will generate ES5 js files.
 * 4.0.0
     - Remove Node.js v0.12 support
     - Remove [BLECAST_TM](http://www.robotsfx.com/robot/BLECAST_TM.html) node and [BLECAST_BL](http://www.robotsfx.com/robot/BLECAST_BL.html) node
+
+* 3.x
+    - See 3.x branch for future 3.x releases
 
 * 3.0.4
     - Remove redundant dependency
@@ -118,6 +124,6 @@ will generate ES5 js files.
 
 # Copyright and License
 
-PNG images under icon folder are released under [CC BY-NC-SA](http://creativecommons.org/licenses/by-nc-sa/4.0/), copyright 2016 [CANDY LINE INC.](http://www.candy-line.io).
+PNG images under icon folder are released under [CC BY-NC-SA](http://creativecommons.org/licenses/by-nc-sa/4.0/), copyright 2017 [CANDY LINE INC.](http://www.candy-line.io).
 
 The project is released under MIT License. See LICENSE for detail.
