@@ -58,6 +58,9 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* 3.1.1
+    - Fix an issue where TimeoutError can be thrown when valid BLE peripherals are missing
+
 * 3.1.0
     - Invoke done() callback at least one associated peripheral exists
     - Fix an issue where done cannot be invoked when the peripheral is already disconnected
