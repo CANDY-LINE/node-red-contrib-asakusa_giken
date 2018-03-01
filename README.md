@@ -7,6 +7,8 @@ Asakusa Giken BLE device Node-RED nodes(Deprecated)
 
 **This node won't work with [`nobile@1.9.0`](https://github.com/noble/noble) or higher so you don't use this node along with nodes using the library such as [node-red-contrib-generic-ble](https://flows.nodered.org/node/node-red-contrib-generic-ble). We no longer update this project in order to support [`nobile@1.9.0`](https://github.com/noble/noble) or higher.**
 
+**This project is no longer active.**
+
 This project offers the following BLE device nodes manufactured by Asakusa Giken.
 
 1. [BLEIo](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%2FBLEIo.html) ... GPIO BLE board
@@ -21,6 +23,8 @@ The following nodes are no longer included:
 ===
 
 **ご注意）[node-red-contrib-generic-ble](https://flows.nodered.org/node/node-red-contrib-generic-ble)ノードなど[`nobile@1.9.0`](https://github.com/noble/noble)以上を利用するノードやライブラリーと併用することはできません。今後[`nobile@1.9.0`](https://github.com/noble/noble)移行に対応する予定はありません**
+
+**ご注意）本プロジェクトは停止しました**
 
 浅草ギ研 BLE対応製品の以下のデバイスに対応したNode-REDノードです。
 
@@ -61,6 +65,10 @@ $ npm run build
 will generate ES5 js files.
 
 # Revision History
+* 4.0.5
+    - Fix noble version as noble v1.9.0+ is no longer supported
+    - Make this project deprecated as we stop the development of this project
+
 * 4.0.4
     - Fix an issue where TimeoutError can be thrown when valid BLE peripherals are missing
 
