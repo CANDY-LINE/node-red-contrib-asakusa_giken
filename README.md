@@ -1,10 +1,11 @@
-Asakusa Giken BLE device Node-RED nodes
+Asakusa Giken BLE device Node-RED nodes(Deprecated)
 ===
 
 [![GitHub release](https://img.shields.io/github/release/CANDY-LINE/node-red-contrib-asakusa_giken.svg)](https://github.com/CANDY-LINE/node-red-contrib-asakusa_giken/releases/latest)
 [![master Build Status](https://travis-ci.org/CANDY-LINE/node-red-contrib-asakusa_giken.svg?branch=master)](https://travis-ci.org/CANDY-LINE/node-red-contrib-asakusa_giken/)
 [![License MIT](https://img.shields.io/github/license/CANDY-LINE/node-red-contrib-asakusa_giken.svg)](http://opensource.org/licenses/MIT)
 
+**This node won't work with [`nobile@1.9.0`](https://github.com/noble/noble) or higher so you don't use this node along with nodes using the library such as [node-red-contrib-generic-ble](https://flows.nodered.org/node/node-red-contrib-generic-ble). We no longer update this project in order to support [`nobile@1.9.0`](https://github.com/noble/noble) or higher.**
 
 This project offers the following BLE device nodes manufactured by Asakusa Giken.
 
@@ -16,8 +17,10 @@ The following nodes are no longer included:
 1. [BLECAST_TM](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%2FBLECAST_TM.html) ... A BLE temperature sensor device
 1. [BLECAST_BL](https://translate.google.com/translate?hl=en&sl=ja&tl=en&u=http%3A%2F%2Fwww.robotsfx.com%2Frobot%2FBLECAST_BL.html) ... A BLE illuminance sensor device
 
-浅草ギ研 BLECAST Node-RED ノード
+浅草ギ研 BLECAST Node-RED ノード(Deprecated)
 ===
+
+**ご注意）[node-red-contrib-generic-ble](https://flows.nodered.org/node/node-red-contrib-generic-ble)ノードなど[`nobile@1.9.0`](https://github.com/noble/noble)以上を利用するノードやライブラリーと併用することはできません。今後[`nobile@1.9.0`](https://github.com/noble/noble)移行に対応する予定はありません**
 
 浅草ギ研 BLE対応製品の以下のデバイスに対応したNode-REDノードです。
 
@@ -32,7 +35,7 @@ The following nodes are no longer included:
 
 ## サンプルフロー
 
-BLEIo向けのサンプルフロー[`example-flow.json`](https://github.com/CANDY-LINE/node-red-contrib-asakusa_giken/blob/develop/src/example-flow.json) が利用可能です。クリックして中身を表示してから全体をコピーし、Node-REDの`Import`から`Clipboard`を選択して内容を貼り付けてください。
+BLEIo向けのサンプルフロー[`example-flow.json`](https://github.com/CANDY-LINE/node-red-contrib-asakusa_giken/blob/master/examples/example-flow.json) が利用可能です。`Import`->`Examples`->`asakusa_giken`->`example-flow`からインポート可能です。
 
 # Install
 
