@@ -53,7 +53,7 @@
     "sinon": "^2.0.0"
   },
   "dependencies": {
-    "noble": "~1.9.0",
+    "noble": "~1.9.1",
     "es6-promises": "^1.0.10",
     "source-map-support": "^0.4.2",
     "lru-cache": "^4.0.0"
