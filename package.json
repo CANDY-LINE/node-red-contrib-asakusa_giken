@@ -33,7 +33,7 @@
     "node-red": "^0.16.2",
     "babel": "^6.23.0",
     "babel-cli": "^6.24.0",
-    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-add-module-exports": "^1.0.0",
     "babel-preset-babili": "0.0.12",
     "babel-preset-es2015": "^6.24.0",
     "chai": "^3.3.0",
