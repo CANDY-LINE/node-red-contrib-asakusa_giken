@@ -56,7 +56,7 @@
     "noble": "~1.8.1",
     "es6-promises": "^1.0.10",
     "source-map-support": "^0.4.2",
-    "lru-cache": "^5.0.1"
+    "lru-cache": "^5.1.0"
   },
   "node-red": {
     "nodes": {
